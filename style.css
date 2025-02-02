@@ -1,0 +1,122 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    display: flex;
+    justify-content: space-between; /* Space between elements */
+    align-items: center;
+    background-color: #b0adad; /* Header background color */
+    height: 60px; /* Fixed height for the header bar */
+    padding: 0 20px; /* Optional: added padding for inner spacing */
+}
+
+.logo img {
+    height: 20px;
+}
+
+nav {
+    display: flex; /* Keep links horizontally aligned */
+    gap: 1rem;
+}
+
+nav a {
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 15px 20px; /* Add padding for better spacing */
+    border-radius: 4px; /* Optional: adds rounded corners */
+    transition: all 0.3s ease-in-out; /* Smooth transition for hover effects */
+    display: flex;
+    align-items: center; /* Center-align text vertically */
+    justify-content: center; /* Center-align text horizontally */
+    flex-grow: 1; /* Ensures each link grows equally */
+}
+
+nav a:hover {
+    background-color: rgb(196, 209, 209); /* Change background on hover */
+    color: #00ffea; /* Change text color on hover */
+}
+
+.menu-toggle {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+/* NEW BUTTON */
+header .action-button {
+    height: 100%; /* Spans the full height of the header */
+    padding: 0 20px; /* Add padding for spacing */
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center the text in the button */
+    background-color: #00ffea; /* Button background color */
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out; /* Smooth transition */
+}
+
+header .action-button:hover {
+    background-color: rgb(0, 180, 160); /* Darker color for hover effect */
+}
+
+main {
+    padding-top: 60px;
+    text-align: center;
+    font-size: 20px;
+    flex: 1;
+}
+
+footer {
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: small;
+}
+
+@media (max-width: 768px) {
+    nav {
+        display: none;
+        flex-direction: column;
+        background-color: #b0adad;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        padding: 1rem;
+        z-index: 1000;
+    }
+
+    nav.active {
+        display: flex;
+    }
+
+    nav a {
+        padding: 15px;
+        width: 100%;
+        text-align: center;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    nav a:last-child {
+        border-bottom: none;
+    }
+
+    .menu-toggle {
+        display: block;
+        z-index: 1001;
+    }
+}

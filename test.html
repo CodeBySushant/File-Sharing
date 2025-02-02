@@ -1,162 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File-Sharing</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Buttons</title>
+  <!-- Link to FontAwesome CDN -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  
+  <style>
+    body {
+      background-color: #ddd;
+      padding: 80px 16px 16px 16px;
+    }
 
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 2rem;
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .logo img {
-            height: 20px;
-        }
-
-        nav {
-            display: flex;
-            gap: 1rem;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            font-size: 1rem;
-            transition: color 0.3s;
-        }
-
-        nav a:hover {
-            color: #ddd;
-        }
-
-        .menu-toggle {
-            display: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        main {
-            flex: 1;
-            padding: 2rem;
-        }
-
-        footer {
-            background-color: #f4f4f4;
-            text-align: center;
-            padding: 1rem;
-            font-size: 0.9rem;
-            color: #555;
-        }
-
-        @media (max-width: 768px) {
-            nav {
-                display: none;
-                flex-direction: column;
-                background-color: #4CAF50;
-                position: absolute;
-                top: 100%;
-                right: 0;
-                width: 100%;
-                text-align: center;
-            }
-
-            nav.active {
-                display: flex;
-            }
-
-            .menu-toggle {
-                display: block;
-            }
-        }
-
-        .file-upload-modern {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 2rem;
-        }
-
-        .file-upload-modern label {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.75rem 1.5rem;
-            background-color: #4CAF50;
-            color: white;
-            font-size: 1rem;
-            font-weight: bold;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .file-upload-modern label:hover {
-            background-color: white;
-            color: #4CAF50;
-        }
-
-        .file-upload-modern input[type="file"] {
-            display: none;
-        }
-
-        .file-upload-modern label:hover .file-text {
-            color: #4CAF50;
-        }
-
-    </style>
+    
+  </style>
 </head>
 <body>
-    <header>
-        <div class="logo"><img src="/File-Sharing/shareyoulogo.png" alt="Brand Logo"></div>
-        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-        <nav id="nav-menu">
-            <a href="#">Home</a>
-            <a href="#">About</a>
-            <a href="#">Services</a>
-            <a href="#">Contact</a>
-        </nav>
-    </header>
-    <main>
-        <div class="file-upload-modern">
-            <input type="file" id="file-input" class="file-input">
-            <label for="file-input">
-                <span class="file-text">Choose File</span>
-            </label>
-        </div>
-    </main>
-    <footer>
-        <pre> Copyright @NitianCreations all rights are preserved with us. </pre>
-    </footer>
 
-    <script>
-        function toggleMenu() {
-            const navMenu = document.getElementById('nav-menu');
-            navMenu.classList.toggle('active');
-        }
+  
 
-        document.getElementById('file-input').addEventListener('change', function(e) {
-            const fileName = e.target.files[0]?.name || 'Choose File';
-            document.querySelector('.file-text').textContent = fileName;
-        });
-    </script>
+  <!-- FontAwesome icons are now included above, so you don't need any extra code -->
+  
 </body>
 </html>
