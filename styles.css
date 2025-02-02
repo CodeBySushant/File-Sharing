@@ -83,7 +83,7 @@ pre{
 }
 
 .file-upload-modern label:hover {
-    background-color: #f8f8f8;
+    background-color: #00ffea;
 }
 
 .file-icon {
@@ -93,23 +93,18 @@ pre{
     transition: all 0.3s;
 }
 
-.file-upload-modern label:hover .file-icon {
-    transform: scale(1.1);
-}
-
 .file-text {
-    color: #666;
+    color: #00ffea;
+    transition: all 0.3s; 
 }
 
-.file-button {
-    background-color: #00ffea;
-    color: white;
-    padding: 6px 12px;
-    border-radius: 4px;
+.file-upload-modern label:hover .file-icon {
+    fill: white;
+    transform: scale(1.1); 
 }
 
-.file-button:hover{
-    background-color: #006eff;
+.file-upload-modern label:hover .file-text {
+    color: white; 
 }
 
 
