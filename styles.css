@@ -223,13 +223,15 @@ footer{
     nav {
         display: none;
         flex-direction: column;
-        background-color: #b0adad; /* Changed to match header color */
+        background-color: #b0adad;
         position: absolute;
-        top: 60px; /* Adjust based on your header height */
-        left: 0; /* Changed from right to left */
-        width: 100%;
-        padding: 1rem;
-        z-index: 1000; /* Ensures menu appears above other content */
+        top: 60px;
+        right: 2rem; /* Changed from left: 0 to right: 2rem */
+        width: 200px; /* Changed from 100% to 200px */
+        padding: 0.5rem;
+        border-radius: 8px; /* Added for box effect */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Added shadow for depth */
+        z-index: 1000;
     }
 
     nav.active {
@@ -237,14 +239,17 @@ footer{
     }
 
     nav a {
-        padding: 15px;
-        width: 100%;
-        text-align: center;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Optional: adds separator between links */
+        padding: 12px;
+        text-align: left;
+        border-radius: 4px; /* Added for hover effect */
+        transition: all 0.3s ease;
+        border-bottom: none; /* Removed border */
     }
 
-    nav a:last-child {
-        border-bottom: none;
+    nav a:hover {
+        background-color: rgb(196, 209, 209);
+        color: #00ffea;
+        transform: translateX(5px); /* Added slight movement on hover */
     }
 
     .menu-toggle {
