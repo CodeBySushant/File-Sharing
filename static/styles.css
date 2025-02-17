@@ -1,29 +1,31 @@
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body{
+body {
     font-family: Arial, sans-serif;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    background-color: #f4f4f9;
+    color: #333;
 }
 
-header{
+header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1rem 2rem;
-    background-color: #b0adad;
-    color: rgb(0, 0, 0);
+    background-color: #4a4a4a;
+    color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .logo img {
-    height: 20px;
+    height: 30px;
 }
-
 
 nav {
     display: flex;
@@ -31,43 +33,43 @@ nav {
 }
 
 nav a {
-    color: rgb(0, 0, 0);
+    color: #fff;
     text-decoration: none;
     font-size: 1rem;
-    padding: 10px 14px;  /* Add padding around the text */
-    border-radius: 4px;  /* Optional: adds rounded corners */
-    transition: all 0.3s;  /* Changed to all to smooth both color and background transitions */
+    padding: 10px 14px;
+    border-radius: 4px;
+    transition: all 0.3s;
 }
 
 nav a:hover {
-    background-color: rgb(196, 209, 209);
-    color: #00ffea;
+    background-color: #00ffea;
+    color: #333;
 }
 
-.menu-toggle{
+.menu-toggle {
     display: none;
     font-size: 1.5rem;
     cursor: pointer;
 }
 
 main {
-    padding-top: 90px;
+    padding: 2rem;
     text-align: center;
-    font-size:20px;
+    font-size: 20px;
     flex: 1;
 }
 
-pre{
+pre {
     padding-top: 15px;
-    font-family:Verdana, Geneva, Tahoma, sans-serif ;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
-p{  
+p {
     font-family: 'Times New Roman', Times, serif;
     font-size: medium;
 }
 
-.file-upload-modern{
+.file-upload-modern {
     margin: 20px;
     padding-top: 50px;
 }
@@ -80,16 +82,18 @@ p{
     display: inline-flex;
     align-items: center;
     gap: 12px;
-    padding: 8px 12px;
-    background-color: white;
+    padding: 12px 16px;
+    background-color: #4a4a4a;
     border: 2px solid #00ffea;
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.3s;
+    color: #fff;
 }
 
 .file-upload-modern label:hover {
     background-color: #00ffea;
+    color: #333;
 }
 
 .file-icon {
@@ -101,19 +105,18 @@ p{
 
 .file-text {
     color: #00ffea;
-    transition: all 0.3s; 
+    transition: all 0.3s;
 }
 
 .file-upload-modern label:hover .file-icon {
-    fill: white;
-    transform: scale(1.1); 
+    fill: #333;
+    transform: scale(1.1);
 }
 
 .file-upload-modern label:hover .file-text {
-    color: white; 
+    color: #333;
 }
 
-/*Social Media Links with proper logo*/
 .social-buttons {
     padding-bottom: 20px;
     display: flex;
@@ -122,27 +125,29 @@ p{
     gap: 8px;
 }
 
-  /* Button Size Variables */
 .social-button-size {
     width: 48px;
     height: 48px;
 }
+
 .social-button-icon-size {
-    font-size: 19.2px; /* 64px * 0.4 */
+    font-size: 19.2px;
 }
+
 .social-button-background {
     background: #fff;
 }
+
 .social-button-active-color {
     color: #fff;
 }
+
 .social-button-transition-time {
     transition: 0.3s;
 }
 
-  /* Social Button Colors */
 .social-button--codepen { color: #0072c6; }
-.social-button--facebook { color: #3b5999; }
+social-button--facebook { color: #3b5999; }
 .social-button--linkedin { color: #0077b5; }
 .social-button--github { color: #6e5494; }
 .social-button--mail { color: #212121; }
@@ -181,12 +186,12 @@ p{
 
 .social-button:hover, .social-button:focus {
     color: #fff;
+}
 
-    &::after {
+.social-button:hover::after, .social-button:focus::after {
     width: calc(100% + 2px);
     height: calc(100% + 2px);
     margin-left: calc(-50% - 1px);
-    }
 }
 
 .social-button i,
@@ -200,7 +205,6 @@ p{
     font-size: 19.2px;
 }
 
-  /* Apply background colors to buttons */
 .social-button--facebook::after { background: #3b5999; }
 .social-button--linkedin::after { background: #0077b5; }
 .social-button--github::after { background: #6e5494; }
@@ -211,26 +215,29 @@ p{
 .social-button--instagram::after { background: #e4405f; }
 .social-button--npmjs::after { background: #c12127; }
 
-footer{
+footer {
     width: 100%;
     height: 110px;
     text-align: center;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: small;
+    background-color: #4a4a4a;
+    color: #fff;
+    padding: 1rem;
 }
 
 @media (max-width: 768px) {
     nav {
         display: none;
         flex-direction: column;
-        background-color: #b0adad;
+        background-color: #4a4a4a;
         position: absolute;
         top: 60px;
-        right: 2rem; /* Changed from left: 0 to right: 2rem */
-        width: 200px; /* Changed from 100% to 200px */
+        right: 2rem;
+        width: 200px;
         padding: 0.5rem;
-        border-radius: 8px; /* Added for box effect */
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Added shadow for depth */
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         z-index: 1000;
     }
 
@@ -241,15 +248,15 @@ footer{
     nav a {
         padding: 12px;
         text-align: left;
-        border-radius: 4px; /* Added for hover effect */
+        border-radius: 4px;
         transition: all 0.3s ease;
-        border-bottom: none; /* Removed border */
+        border-bottom: none;
     }
 
     nav a:hover {
-        background-color: rgb(196, 209, 209);
-        color: #00ffea;
-        transform: translateX(5px); /* Added slight movement on hover */
+        background-color: #00ffea;
+        color: #333;
+        transform: translateX(5px);
     }
 
     .menu-toggle {
