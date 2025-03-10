@@ -5,11 +5,11 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background-color: #f4f4f9;
+    background-color: #ffffff;
     color: #333;
 }
 
@@ -18,13 +18,14 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 1rem 2rem;
-    background-color: #4a4a4a;
+    background-color: #333;
     color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .logo img {
     height: 30px;
+    filter: brightness(0) invert(1); /* Invert colors to make dark logo visible on dark background */
 }
 
 nav {
@@ -42,8 +43,8 @@ nav a {
 }
 
 nav a:hover {
-    background-color: #00ffea;
-    color: #333;
+    background-color: #00bfa5;
+    color: #fff;
 }
 
 .menu-toggle {
@@ -61,11 +62,11 @@ main {
 
 pre {
     padding-top: 15px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 p {
-    font-family: 'Times New Roman', Times, serif;
+    font-family: 'Georgia', serif;
     font-size: medium;
 }
 
@@ -83,8 +84,8 @@ p {
     align-items: center;
     gap: 12px;
     padding: 12px 16px;
-    background-color: #4a4a4a;
-    border: 2px solid #00ffea;
+    background-color: #333;
+    border: 2px solid #00bfa5;
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.3s;
@@ -92,29 +93,29 @@ p {
 }
 
 .file-upload-modern label:hover {
-    background-color: #00ffea;
-    color: #333;
+    background-color: #00bfa5;
+    color: #fff;
 }
 
 .file-icon {
-    fill: #00ffea;
+    fill: #00bfa5;
     width: 24px;
     height: 24px;
     transition: all 0.3s;
 }
 
 .file-text {
-    color: #00ffea;
+    color: #00bfa5;
     transition: all 0.3s;
 }
 
 .file-upload-modern label:hover .file-icon {
-    fill: #333;
+    fill: #fff;
     transform: scale(1.1);
 }
 
 .file-upload-modern label:hover .file-text {
-    color: #333;
+    color: #fff;
 }
 
 .social-buttons {
@@ -146,16 +147,8 @@ p {
     transition: 0.3s;
 }
 
-.social-button--codepen { color: #0072c6; }
-social-button--facebook { color: #3b5999; }
 .social-button--linkedin { color: #0077b5; }
 .social-button--github { color: #6e5494; }
-.social-button--mail { color: #212121; }
-.social-button--steam { color: #7da10e; }
-.social-button--snapchat { color: #eec900; }
-.social-button--twitter { color: #55acee; }
-.social-button--instagram { color: #e4405f; }
-.social-button--npmjs { color: #c12127; }
 
 .social-button {
     position: relative;
@@ -175,7 +168,6 @@ social-button--facebook { color: #3b5999; }
 .social-button::after {
     content: '';
     position: absolute;
-    top: -1px;
     left: 50%;
     display: block;
     width: 0;
@@ -201,19 +193,12 @@ social-button--facebook { color: #3b5999; }
     transition: 0.3s;
 }
 
-.social-button i {
+social-button i {
     font-size: 19.2px;
 }
 
-.social-button--facebook::after { background: #3b5999; }
 .social-button--linkedin::after { background: #0077b5; }
 .social-button--github::after { background: #6e5494; }
-.social-button--mail::after { background: #212121; }
-.social-button--steam::after { background: #7da10e; }
-.social-button--snapchat::after { background: #eec900; }
-.social-button--twitter::after { background: #55acee; }
-.social-button--instagram::after { background: #e4405f; }
-.social-button--npmjs::after { background: #c12127; }
 
 footer {
     width: 100%;
@@ -221,7 +206,7 @@ footer {
     text-align: center;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: small;
-    background-color: #4a4a4a;
+    background-color: #333;
     color: #fff;
     padding: 1rem;
 }
@@ -230,7 +215,7 @@ footer {
     nav {
         display: none;
         flex-direction: column;
-        background-color: #4a4a4a;
+        background-color: #333;
         position: absolute;
         top: 60px;
         right: 2rem;
@@ -254,8 +239,8 @@ footer {
     }
 
     nav a:hover {
-        background-color: #00ffea;
-        color: #333;
+        background-color: #00bfa5;
+        color: #fff;
         transform: translateX(5px);
     }
 

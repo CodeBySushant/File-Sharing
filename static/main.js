@@ -15,10 +15,17 @@ async function uploadFile(file) {
     if (response.ok) {
         const data = await response.json();
         document.getElementById('upload-button').style.display = 'none';
-        const uploadedFileLink = document.createElement('a');
-        uploadedFileLink.href = `/file/${data.file_id}`;
-        uploadedFileLink.textContent = `Uploaded File: ${file.name}`;
-        document.querySelector('.file-upload-modern').appendChild(uploadedFileLink);
+        
+        const qrCodeContainer = document.createElement('div');
+        qrCodeContainer.id = 'qr-code';
+        qrCodeContainer.classList.add('center-qr-code'); // Add this line
+        document.querySelector('.file-upload-modern').appendChild(qrCodeContainer);
+
+        const qrCode = new QRCode(qrCodeContainer, {
+            text: `/file/${data.file_id}`,
+            width: 128,
+            height: 128
+        });
     } else {
         alert('File upload failed.');
     }
