@@ -25,7 +25,7 @@ header {
 
 .logo img {
     height: 30px;
-    filter: brightness(0) invert(1); /* Invert colors to make dark logo visible on dark background */
+    filter: brightness(0) invert(1);
 }
 
 nav {

@@ -18,11 +18,12 @@ async function uploadFile(file) {
         
         const qrCodeContainer = document.createElement('div');
         qrCodeContainer.id = 'qr-code';
-        qrCodeContainer.classList.add('center-qr-code'); // Add this line
+        qrCodeContainer.classList.add('center-qr-code');
         document.querySelector('.file-upload-modern').appendChild(qrCodeContainer);
+        document.getElementById("display-text").textContent = `${window.location.host}/file/${data.file_id}`;
 
         const qrCode = new QRCode(qrCodeContainer, {
-            text: `/file/${data.file_id}`,
+            text: `${window.location.host}/file/${data.file_id}`,
             width: 128,
             height: 128
         });

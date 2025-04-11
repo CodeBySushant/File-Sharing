@@ -1,6 +1,6 @@
 import shutil
 from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
@@ -30,6 +30,10 @@ def get_db():
 
 app.mount("/web", StaticFiles(directory="static"), name="static")
 
+@app.get("/")
+async def root():
+    return RedirectResponse(url="/web/index.html")
+
 @app.post("/upload", response_model=FileUploadResponse)
 async def upload_file(file: UploadFile = File(...), db: Session = Depends(get_db)):
     file_id = str(uuid.uuid4())
@@ -52,3 +56,7 @@ async def get_file(file_id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="File not found")
     
     return FileResponse(path=db_file.file_path)
+
+if __name__ == '__main__':
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
