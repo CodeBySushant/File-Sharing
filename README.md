@@ -65,9 +65,3 @@ File-Sharing eliminates these barriers by providing:
 
 4. **Access the Application**:
    - Open your browser and navigate to `http://localhost:8000/`.
-
-## Future Enhancements
-- Add support for file expiration and automatic deletion.
-- Implement user authentication for private file sharing.
-- Enable cloud storage integration for scalability.
-- Add multi-language support for a global audience.
