@@ -21,10 +21,11 @@ header {
     background-color: #333;
     color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex-wrap: wrap;
 }
 
 .logo img {
-    height: 30px;
+    height: 24px;
     filter: brightness(0) invert(1);
 }
 
@@ -36,7 +37,7 @@ nav {
 nav a {
     color: #fff;
     text-decoration: none;
-    font-size: 1rem;
+    font-size: 0.9rem;
     padding: 10px 14px;
     border-radius: 4px;
     transition: all 0.3s;
@@ -54,15 +55,22 @@ nav a:hover {
 }
 
 main {
-    padding: 2rem;
-    text-align: center;
-    font-size: 20px;
+    padding: 1rem;
+    font-size: 16px;
     flex: 1;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 10vh;
 }
 
 pre {
     padding-top: 15px;
     font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
+    text-wrap: normal;
+    white-space: pre-wrap;
+    text-align: center;
 }
 
 p {
@@ -71,8 +79,8 @@ p {
 }
 
 .file-upload-modern {
-    margin: 20px;
-    padding-top: 50px;
+    margin: 10px;
+    padding-top: 20px;
 }
 
 .file-input {
@@ -83,13 +91,14 @@ p {
     display: inline-flex;
     align-items: center;
     gap: 12px;
-    padding: 12px 16px;
+    padding: 10px 12px;
     background-color: #333;
     border: 2px solid #00bfa5;
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.3s;
     color: #fff;
+    font-size: 0.9rem;
 }
 
 .file-upload-modern label:hover {
@@ -99,14 +108,15 @@ p {
 
 .file-icon {
     fill: #00bfa5;
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     transition: all 0.3s;
 }
 
 .file-text {
     color: #00bfa5;
     transition: all 0.3s;
+    font-size: 0.9rem;
 }
 
 .file-upload-modern label:hover .file-icon {
@@ -143,7 +153,7 @@ p {
     color: #fff;
 }
 
-.social-button-transition-time {
+social-button-transition-time {
     transition: 0.3s;
 }
 
@@ -177,17 +187,17 @@ p {
 }
 
 .social-button:hover, .social-button:focus {
-    color: #fff;
+    color: #000;
 }
 
-.social-button:hover::after, .social-button:focus::after {
+social-button:hover::after, .social-button:focus::after {
     width: calc(100% + 2px);
     height: calc(100% + 2px);
     margin-left: calc(-50% - 1px);
 }
 
-.social-button i,
-.social-button svg {
+social-button i,
+social-button svg {
     position: relative;
     z-index: 1;
     transition: 0.3s;
@@ -197,18 +207,22 @@ social-button i {
     font-size: 19.2px;
 }
 
-.social-button--linkedin::after { background: #0077b5; }
-.social-button--github::after { background: #6e5494; }
+social-button--linkedin::after { background: #0077b5; }
+social-button--github::after { background: #6e5494; }
 
 footer {
     width: 100%;
     height: 110px;
     text-align: center;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: small;
+    font-size: 0.8rem;
     background-color: #333;
     color: #fff;
-    padding: 1rem;
+    padding: 0.5rem;
+}
+
+#display-text {
+    text-align: center;
 }
 
 @media (max-width: 768px) {
@@ -247,5 +261,33 @@ footer {
     .menu-toggle {
         display: block;
         z-index: 1001;
+    }
+}
+
+@media (max-width: 480px) {
+    header {
+        align-items: flex-start;
+    }
+
+    .menu-toggle {
+        align-self: flex-end;
+    }
+
+    nav a {
+        font-size: 0.8rem;
+        padding: 8px 10px;
+    }
+
+    main {
+        font-size: 14px;
+        justify-content: center;
+    }
+
+    .file-upload-modern label {
+        padding: 8px 10px;
+    }
+
+    footer {
+        font-size: 0.7rem;
     }
 }
