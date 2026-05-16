@@ -1,4 +1,3 @@
-import shutil
 from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
 from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -85,7 +84,26 @@ async def get_file(file_id: str, db: Session = Depends(get_db)):
     if db_file is None:
         raise HTTPException(status_code=404, detail="File not found")
 
-    return FileResponse(path=db_file.file_path)
+    return FileResponse(
+        path=db_file.file_path, filename=db_file.file_name, media_type=db_file.file_type
+    )
+
+
+@app.get("/recent-files")
+async def get_recent_files(db: Session = Depends(get_db)):
+
+    files = db.query(FileModel).order_by(FileModel.uploaded_at.desc()).limit(10).all()
+
+    return [
+        {
+            "file_id": file.file_id,
+            "file_name": file.file_name,
+            "file_size": file.file_size,
+            "file_type": file.file_type,
+            "uploaded_at": file.uploaded_at.isoformat(),
+        }
+        for file in files
+    ]
 
 
 if __name__ == "__main__":

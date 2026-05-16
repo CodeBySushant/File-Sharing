@@ -117,6 +117,7 @@ async function uploadFile(file) {
       const data = JSON.parse(xhr.responseText);
 
       showSuccess(file.name, data.file_id);
+      loadRecentFiles();
 
       showToast("✓ File uploaded successfully!");
     } else {
@@ -222,3 +223,44 @@ document.querySelectorAll(".etab:not(.active)").forEach((tab) => {
     this.classList.add("active");
   });
 });
+
+async function loadRecentFiles() {
+  try {
+    const response = await fetch("/recent-files");
+
+    if (!response.ok) return;
+
+    const files = await response.json();
+
+    const recentList = document.getElementById("recent-list");
+
+    recentList.innerHTML = "";
+
+    files.forEach((file) => {
+      const sizeMB = (file.file_size / (1024 * 1024)).toFixed(2);
+
+      const item = document.createElement("div");
+
+      item.className = "recent-item";
+
+      item.innerHTML = `
+        <div class="ri-icon file-code">
+          <i class="fa-solid fa-file"></i>
+        </div>
+
+        <div class="ri-info">
+          <div class="ri-name">${file.file_name}</div>
+          <div class="ri-meta">${sizeMB} MB</div>
+        </div>
+
+        <div class="ri-status done">Shared</div>
+      `;
+
+      recentList.appendChild(item);
+    });
+  } catch (err) {
+    console.error("Failed to load recent files", err);
+  }
+}
+
+loadRecentFiles();
