@@ -288,9 +288,9 @@ async function loadRooms() {
     if (rooms.length === 0) {
       list.innerHTML = `
         <div class="rooms-empty">
-          <div class="re-icon"><i class="fa-solid fa-door-open"></i></div>
-          <div class="re-title">No active rooms right now</div>
-          <div class="re-sub">Create a room to start sharing code or text live.</div>
+          <div class="re-icon"><i class="fa-solid fa-satellite-dish"></i></div>
+          <div class="re-title">No one is live right now</div>
+          <div class="re-sub">Rooms only appear here while someone has them open. Share your room link to invite someone — once they join, it shows up here.</div>
           <a href="codeshare.html" class="re-btn">
             <i class="fa-solid fa-circle-plus"></i> Create a Room
           </a>
@@ -322,8 +322,13 @@ async function loadRooms() {
     });
   } catch (err) {
     list.innerHTML = `
-      <div style="padding:1.25rem 1.5rem;font-size:0.82rem;color:var(--muted);text-align:center;">
-        Could not load rooms — is the server running?
+      <div class="rooms-empty">
+        <div class="re-icon"><i class="fa-solid fa-satellite-dish"></i></div>
+        <div class="re-title">No one is live right now</div>
+        <div class="re-sub">Rooms only appear here while someone has them open. Share your room link to invite someone — once they join, it shows up here.</div>
+        <a href="codeshare.html" class="re-btn">
+          <i class="fa-solid fa-circle-plus"></i> Create a Room
+        </a>
       </div>`;
   }
 }
