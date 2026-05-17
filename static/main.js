@@ -228,23 +228,19 @@ async function loadStats() {
     if (!res.ok) return;
     const data = await res.json();
 
-    // Files shared
-    const filesEl = document.querySelector('.dash-stat:nth-child(1) .ds-val');
-    if (filesEl) filesEl.textContent = data.total_files.toLocaleString();
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
 
-    // Active rooms
-    const roomsEl = document.querySelector('.dash-stat:nth-child(2) .ds-val');
-    if (roomsEl) roomsEl.textContent = data.live_rooms;
+    set('stat-files',   data.total_files.toLocaleString());
+    set('stat-rooms',   data.live_rooms);
+    set('stat-devices', data.live_viewers);
+    set('stat-uptime',  data.uptime_days !== null ? (data.uptime_days > 0 ? `${data.uptime_days}d` : '< 1d') : '99.9%');
 
-    // Devices connected (live viewers)
-    const devicesEl = document.querySelector('.dash-stat:nth-child(4) .ds-val');
-    if (devicesEl) devicesEl.textContent = data.live_viewers;
+    // Trend labels
+    set('stat-rooms-trend',   `↑ ${data.rooms_24h} new today`);
+    set('stat-devices-trend', `${data.live_viewers} connected now`);
 
-    // Uptime
-    const uptimeEl = document.querySelector('.dash-stat:nth-child(3) .ds-val');
-    if (uptimeEl && data.uptime_days !== null) {
-      uptimeEl.textContent = data.uptime_days > 0 ? `${data.uptime_days}d` : '< 1d';
-    }
+    const sizeMB = (data.total_size_bytes / (1024 * 1024)).toFixed(0);
+    set('stat-files-trend', sizeMB > 0 ? `${sizeMB} MB total` : '');
   } catch (err) {
     console.error('Failed to load stats:', err);
   }

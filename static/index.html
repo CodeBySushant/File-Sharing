@@ -1,459 +1,696 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>ShareYou — Realtime Collaboration Platform</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="icon" type="image/png" href="favicon.ico" />
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>ShareYou — Realtime Collaboration Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" type="image/png" href="favicon.ico" />
+  </head>
+  <body>
+    <!-- ═══════════════ NAVBAR ═══════════════ -->
+    <header class="navbar" id="navbar">
+      <div class="nav-inner">
+        <a href="#" class="brand">
+          <div class="brand-icon">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="18" cy="5" r="3" />
+              <circle cx="6" cy="12" r="3" />
+              <circle cx="18" cy="19" r="3" />
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+            </svg>
+          </div>
+          <span class="brand-name">ShareYou</span>
+        </a>
 
-<!-- ═══════════════ NAVBAR ═══════════════ -->
-<header class="navbar" id="navbar">
-  <div class="nav-inner">
-    <a href="#" class="brand">
-      <div class="brand-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
-          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-        </svg>
-      </div>
-      <span class="brand-name">ShareYou</span>
-    </a>
+        <nav class="nav-links" id="nav-links">
+          <a href="#hero" class="nl">Home</a>
+          <a href="#features" class="nl">Features</a>
+          <a href="#workspace" class="nl">Workspace</a>
+          <a href="#code-editor" class="nl">Code Share</a>
+          <a href="#dashboard" class="nl">Dashboard</a>
+          <a href="about.html" class="nl">About</a>
+        </nav>
 
-    <nav class="nav-links" id="nav-links">
-      <a href="#hero" class="nl">Home</a>
-      <a href="#features" class="nl">Features</a>
-      <a href="#workspace" class="nl">Workspace</a>
-      <a href="#code-editor" class="nl">Code Share</a>
-      <a href="#dashboard" class="nl">Dashboard</a>
-      <a href="about.html" class="nl">About</a>
-    </nav>
-
-    <div class="nav-right">
-      <a href="#workspace" class="cta-btn">
-        <span>Start Sharing</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </a>
-      <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </div>
-</header>
-
-<!-- ═══════════════ HERO ═══════════════ -->
-<section class="hero" id="hero">
-  <div class="hero-bg">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-    <div class="grid-overlay"></div>
-  </div>
-
-  <div class="hero-content">
-    <div class="hero-badge">
-      <span class="badge-dot"></span>
-      <span>Now in public beta</span>
-    </div>
-    <h1 class="hero-title">
-      Share everything.<br />
-      <span class="gradient-text">Collaborate instantly.</span>
-    </h1>
-    <p class="hero-sub">
-      Files, code, text — shared in seconds across any device.<br />
-      The collaboration platform built for modern teams.
-    </p>
-    <div class="hero-actions">
-      <a href="#workspace" class="btn-primary">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        Start Uploading
-      </a>
-      <a href="#features" class="btn-ghost">
-        See Features
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </a>
-    </div>
-
-    <div class="hero-cards">
-      <div class="hcard hcard-1">
-        <div class="hcard-icon"><i class="fa-solid fa-file-arrow-up"></i></div>
-        <div>
-          <div class="hcard-label">File shared</div>
-          <div class="hcard-val">design_v3.fig</div>
-        </div>
-        <div class="hcard-status success">Done</div>
-      </div>
-      <div class="hcard hcard-2">
-        <div class="hcard-icon"><i class="fa-solid fa-users"></i></div>
-        <div>
-          <div class="hcard-label">Live room</div>
-          <div class="hcard-val">4 collaborators</div>
-        </div>
-        <div class="live-dot"></div>
-      </div>
-      <div class="hcard hcard-3">
-        <div class="hcard-icon"><i class="fa-solid fa-qrcode"></i></div>
-        <div>
-          <div class="hcard-label">QR Ready</div>
-          <div class="hcard-val">Scan to receive</div>
+        <div class="nav-right">
+          <a href="#workspace" class="cta-btn">
+            <span>Start Sharing</span>
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </a>
+          <button
+            class="hamburger"
+            id="hamburger"
+            onclick="toggleMenu()"
+            aria-label="Menu"
+          >
+            <span></span><span></span><span></span>
+          </button>
         </div>
       </div>
-    </div>
-  </div>
+    </header>
 
-  <div class="scroll-hint">
-    <div class="scroll-pill"><div class="scroll-dot"></div></div>
-  </div>
-</section>
-
-<!-- ═══════════════ FEATURES ═══════════════ -->
-<section class="features" id="features">
-  <div class="section-header">
-    <div class="section-tag">Capabilities</div>
-    <h2 class="section-title">Everything you need to share</h2>
-    <p class="section-sub">A complete collaboration suite in one elegant workspace.</p>
-  </div>
-  <div class="feat-grid">
-    <div class="feat-card">
-      <div class="feat-icon-wrap" style="--glow:#22d3ee"><i class="fa-solid fa-cloud-arrow-up"></i></div>
-      <h3>Drag &amp; Drop Files</h3>
-      <p>Drop any file type. Instant upload, instant link, instant share.</p>
-      <div class="feat-tag">Files</div>
-    </div>
-    <div class="feat-card">
-      <div class="feat-icon-wrap" style="--glow:#a78bfa"><i class="fa-solid fa-code"></i></div>
-      <h3>Live Code Sharing</h3>
-      <p>Collaborate on code in realtime with syntax highlighting and live cursors.</p>
-      <div class="feat-tag">Code</div>
-    </div>
-    <div class="feat-card">
-      <div class="feat-icon-wrap" style="--glow:#34d399"><i class="fa-solid fa-pen-to-square"></i></div>
-      <h3>Text Collaboration</h3>
-      <p>Shared live documents that update as you type — no refresh needed.</p>
-      <div class="feat-tag">Text</div>
-    </div>
-    <div class="feat-card">
-      <div class="feat-icon-wrap" style="--glow:#fb923c"><i class="fa-solid fa-qrcode"></i></div>
-      <h3>QR Code Transfer</h3>
-      <p>Generate a QR instantly. Point, scan, receive. Cross-device in seconds.</p>
-      <div class="feat-tag">QR</div>
-    </div>
-    <div class="feat-card">
-      <div class="feat-icon-wrap" style="--glow:#f472b6"><i class="fa-solid fa-rotate"></i></div>
-      <h3>Live Sync</h3>
-      <p>Changes propagate in real time across all connected devices and sessions.</p>
-      <div class="feat-tag">Sync</div>
-    </div>
-    <div class="feat-card">
-      <div class="feat-icon-wrap" style="--glow:#60a5fa"><i class="fa-solid fa-shield-halved"></i></div>
-      <h3>Secure Rooms</h3>
-      <p>Encrypted collaborative rooms with access controls and expiry links.</p>
-      <div class="feat-tag">Security</div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════ WORKSPACE ═══════════════ -->
-<section class="workspace" id="workspace">
-  <div class="section-header">
-    <div class="section-tag">Workspace</div>
-    <h2 class="section-title">Your sharing hub</h2>
-    <p class="section-sub">Drop files, grab links, share QR codes — all in one place.</p>
-  </div>
-
-  <div class="workspace-panel">
-    <div class="upload-zone" id="upload-zone">
-
-      <!-- Empty state -->
-      <div class="upload-empty" id="upload-empty">
-        <div class="upload-icon-wrap">
-          <svg class="upload-cloud" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/>
-            <path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/>
-          </svg>
-        </div>
-        <p class="upload-main-text">Drop your file here</p>
-        <p class="upload-sub-text">or click to browse — any file type, up to 100MB</p>
-        <label for="file-input" class="upload-browse-btn">
-          <i class="fa-solid fa-folder-open"></i>
-          Browse Files
-        </label>
-        <input type="file" id="file-input" multiple class="file-input-hidden" />
+    <!-- ═══════════════ HERO ═══════════════ -->
+    <section class="hero" id="hero">
+      <div class="hero-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="grid-overlay"></div>
       </div>
 
-      <!-- Progress state -->
-      <div class="upload-progress" id="upload-progress" style="display:none">
-        <div class="progress-filename" id="progress-filename">uploading...</div>
-        <div class="progress-bar-wrap">
-          <div class="progress-bar" id="progress-bar"></div>
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          <span>Now in public beta</span>
         </div>
-        <div class="progress-pct" id="progress-pct">0%</div>
+        <h1 class="hero-title">
+          Share everything.<br />
+          <span class="gradient-text">Collaborate instantly.</span>
+        </h1>
+        <p class="hero-sub">
+          Files, code, text — shared in seconds across any device.<br />
+          The collaboration platform built for modern teams.
+        </p>
+        <div class="hero-actions">
+          <a href="#workspace" class="btn-primary">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
+            Start Uploading
+          </a>
+          <a href="#features" class="btn-ghost">
+            See Features
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </a>
+        </div>
+
+        <div class="hero-cards">
+          <div class="hcard hcard-1">
+            <div class="hcard-icon">
+              <i class="fa-solid fa-file-arrow-up"></i>
+            </div>
+            <div>
+              <div class="hcard-label">File shared</div>
+              <div class="hcard-val">design_v3.fig</div>
+            </div>
+            <div class="hcard-status success">Done</div>
+          </div>
+          <div class="hcard hcard-2">
+            <div class="hcard-icon"><i class="fa-solid fa-users"></i></div>
+            <div>
+              <div class="hcard-label">Live room</div>
+              <div class="hcard-val">4 collaborators</div>
+            </div>
+            <div class="live-dot"></div>
+          </div>
+          <div class="hcard hcard-3">
+            <div class="hcard-icon"><i class="fa-solid fa-qrcode"></i></div>
+            <div>
+              <div class="hcard-label">QR Ready</div>
+              <div class="hcard-val">Scan to receive</div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Success state -->
-      <div class="upload-success" id="upload-success" style="display:none">
-        <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
-        <div class="success-filename" id="success-filename"></div>
-        <div class="share-link-box">
-          <div class="share-link-label">Shareable Link</div>
-          <div class="share-link-row">
-            <input type="text" class="share-link-input" id="share-link-input" readonly />
-            <button class="copy-btn" id="copy-btn" onclick="copyLink()">
-              <i class="fa-regular fa-copy"></i>
+      <div class="scroll-hint">
+        <div class="scroll-pill"><div class="scroll-dot"></div></div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ FEATURES ═══════════════ -->
+    <section class="features" id="features">
+      <div class="section-header">
+        <div class="section-tag">Capabilities</div>
+        <h2 class="section-title">Everything you need to share</h2>
+        <p class="section-sub">
+          A complete collaboration suite in one elegant workspace.
+        </p>
+      </div>
+      <div class="feat-grid">
+        <div class="feat-card">
+          <div class="feat-icon-wrap" style="--glow: #22d3ee">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+          </div>
+          <h3>Drag &amp; Drop Files</h3>
+          <p>
+            Drop any file type. Instant upload, instant link, instant share.
+          </p>
+          <div class="feat-tag">Files</div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon-wrap" style="--glow: #a78bfa">
+            <i class="fa-solid fa-code"></i>
+          </div>
+          <h3>Live Code Sharing</h3>
+          <p>
+            Collaborate on code in realtime with syntax highlighting and live
+            cursors.
+          </p>
+          <div class="feat-tag">Code</div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon-wrap" style="--glow: #34d399">
+            <i class="fa-solid fa-pen-to-square"></i>
+          </div>
+          <h3>Text Collaboration</h3>
+          <p>
+            Shared live documents that update as you type — no refresh needed.
+          </p>
+          <div class="feat-tag">Text</div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon-wrap" style="--glow: #fb923c">
+            <i class="fa-solid fa-qrcode"></i>
+          </div>
+          <h3>QR Code Transfer</h3>
+          <p>
+            Generate a QR instantly. Point, scan, receive. Cross-device in
+            seconds.
+          </p>
+          <div class="feat-tag">QR</div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon-wrap" style="--glow: #f472b6">
+            <i class="fa-solid fa-rotate"></i>
+          </div>
+          <h3>Live Sync</h3>
+          <p>
+            Changes propagate in real time across all connected devices and
+            sessions.
+          </p>
+          <div class="feat-tag">Sync</div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon-wrap" style="--glow: #60a5fa">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <h3>Secure Rooms</h3>
+          <p>
+            Encrypted collaborative rooms with access controls and expiry links.
+          </p>
+          <div class="feat-tag">Security</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ WORKSPACE ═══════════════ -->
+    <section class="workspace" id="workspace">
+      <div class="section-header">
+        <div class="section-tag">Workspace</div>
+        <h2 class="section-title">Your sharing hub</h2>
+        <p class="section-sub">
+          Drop files, grab links, share QR codes — all in one place.
+        </p>
+      </div>
+
+      <div class="workspace-panel">
+        <div class="upload-zone" id="upload-zone">
+          <!-- Empty state -->
+          <div class="upload-empty" id="upload-empty">
+            <div class="upload-icon-wrap">
+              <svg
+                class="upload-cloud"
+                width="48"
+                height="48"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="16 16 12 12 8 16" />
+                <line x1="12" y1="12" x2="12" y2="21" />
+                <path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3" />
+              </svg>
+            </div>
+            <p class="upload-main-text">Drop your file here</p>
+            <p class="upload-sub-text">
+              or click to browse — any file type, up to 100MB
+            </p>
+            <label for="file-input" class="upload-browse-btn">
+              <i class="fa-solid fa-folder-open"></i>
+              Browse Files
+            </label>
+            <input
+              type="file"
+              id="file-input"
+              multiple
+              class="file-input-hidden"
+            />
+          </div>
+
+          <!-- Progress state -->
+          <div
+            class="upload-progress"
+            id="upload-progress"
+            style="display: none"
+          >
+            <div class="progress-filename" id="progress-filename">
+              uploading...
+            </div>
+            <div class="progress-bar-wrap">
+              <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <div class="progress-pct" id="progress-pct">0%</div>
+          </div>
+
+          <!-- Success state -->
+          <div class="upload-success" id="upload-success" style="display: none">
+            <div class="success-icon">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <div class="success-filename" id="success-filename"></div>
+            <div class="share-link-box">
+              <div class="share-link-label">Shareable Link</div>
+              <div class="share-link-row">
+                <input
+                  type="text"
+                  class="share-link-input"
+                  id="share-link-input"
+                  readonly
+                />
+                <button class="copy-btn" id="copy-btn" onclick="copyLink()">
+                  <i class="fa-regular fa-copy"></i>
+                </button>
+              </div>
+            </div>
+            <div class="qr-section">
+              <div class="qr-label">Scan with any device</div>
+              <div class="qr-box" id="qr-box"></div>
+            </div>
+            <button class="reset-btn" onclick="resetUpload()">
+              <i class="fa-solid fa-arrow-rotate-left"></i> Share another file
             </button>
           </div>
         </div>
-        <div class="qr-section">
-          <div class="qr-label">Scan with any device</div>
-          <div class="qr-box" id="qr-box"></div>
-        </div>
-        <button class="reset-btn" onclick="resetUpload()">
-          <i class="fa-solid fa-arrow-rotate-left"></i> Share another file
-        </button>
-      </div>
-    </div>
 
-    <!-- Sidebar -->
-    <div class="workspace-sidebar">
-      <div class="sidebar-card">
-        <div class="sc-header">
-          <i class="fa-solid fa-clock-rotate-left"></i>
-          Recent Shares
-        </div>
-        <div class="recent-list" id="recent-list">
-          <div class="recent-item">
-            <div class="ri-icon file-pdf"><i class="fa-solid fa-file-pdf"></i></div>
-            <div class="ri-info">
-              <div class="ri-name">proposal_final.pdf</div>
-              <div class="ri-meta">2 min ago · 4.2 MB</div>
+        <!-- Sidebar -->
+        <div class="workspace-sidebar">
+          <div class="sidebar-card">
+            <div class="sc-header">
+              <i class="fa-solid fa-clock-rotate-left"></i>
+              Recent Shares
             </div>
-            <div class="ri-status done">Shared</div>
-          </div>
-          <div class="recent-item">
-            <div class="ri-icon file-img"><i class="fa-solid fa-image"></i></div>
-            <div class="ri-info">
-              <div class="ri-name">screenshot.png</div>
-              <div class="ri-meta">18 min ago · 1.1 MB</div>
+            <div class="recent-list" id="recent-list">
+              <div class="recent-item">
+                <div class="ri-icon file-pdf">
+                  <i class="fa-solid fa-file-pdf"></i>
+                </div>
+                <div class="ri-info">
+                  <div class="ri-name">proposal_final.pdf</div>
+                  <div class="ri-meta">2 min ago · 4.2 MB</div>
+                </div>
+                <div class="ri-status done">Shared</div>
+              </div>
+              <div class="recent-item">
+                <div class="ri-icon file-img">
+                  <i class="fa-solid fa-image"></i>
+                </div>
+                <div class="ri-info">
+                  <div class="ri-name">screenshot.png</div>
+                  <div class="ri-meta">18 min ago · 1.1 MB</div>
+                </div>
+                <div class="ri-status done">Shared</div>
+              </div>
+              <div class="recent-item">
+                <div class="ri-icon file-code">
+                  <i class="fa-solid fa-file-code"></i>
+                </div>
+                <div class="ri-info">
+                  <div class="ri-name">main.py</div>
+                  <div class="ri-meta">1 hr ago · 22 KB</div>
+                </div>
+                <div class="ri-status done">Shared</div>
+              </div>
             </div>
-            <div class="ri-status done">Shared</div>
           </div>
-          <div class="recent-item">
-            <div class="ri-icon file-code"><i class="fa-solid fa-file-code"></i></div>
-            <div class="ri-info">
-              <div class="ri-name">main.py</div>
-              <div class="ri-meta">1 hr ago · 22 KB</div>
+          <div class="sidebar-card">
+            <div class="sc-header">
+              <i class="fa-solid fa-bolt"></i>
+              Quick Actions
             </div>
-            <div class="ri-status done">Shared</div>
+            <div class="qa-grid">
+              <button class="qa-btn">
+                <i class="fa-solid fa-code"></i> Code Share
+              </button>
+              <button class="qa-btn">
+                <i class="fa-solid fa-pen"></i> Text Share
+              </button>
+              <button class="qa-btn">
+                <i class="fa-solid fa-users"></i> New Room
+              </button>
+              <button class="qa-btn">
+                <i class="fa-solid fa-qrcode"></i> QR Scan
+              </button>
+            </div>
           </div>
         </div>
       </div>
-      <div class="sidebar-card">
-        <div class="sc-header">
-          <i class="fa-solid fa-bolt"></i>
-          Quick Actions
-        </div>
-        <div class="qa-grid">
-          <button class="qa-btn"><i class="fa-solid fa-code"></i> Code Share</button>
-          <button class="qa-btn"><i class="fa-solid fa-pen"></i> Text Share</button>
-          <button class="qa-btn"><i class="fa-solid fa-users"></i> New Room</button>
-          <button class="qa-btn"><i class="fa-solid fa-qrcode"></i> QR Scan</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- ═══════════════ CODE EDITOR ═══════════════ -->
-<section class="code-section" id="code-editor">
-  <div class="section-header">
-    <div class="section-tag">Code Share</div>
-    <h2 class="section-title">Live collaborative editor</h2>
-    <p class="section-sub">Write code together in realtime — like pair programming, anywhere.</p>
-  </div>
-  <div class="editor-mockup">
-    <div class="editor-chrome">
-      <div class="editor-dots">
-        <span class="dot dot-red"></span>
-        <span class="dot dot-yellow"></span>
-        <span class="dot dot-green"></span>
+    <!-- ═══════════════ CODE EDITOR ═══════════════ -->
+    <section class="code-section" id="code-editor">
+      <div class="section-header">
+        <div class="section-tag">Code Share</div>
+        <h2 class="section-title">Live collaborative editor</h2>
+        <p class="section-sub">
+          Write code together in realtime — like pair programming, anywhere.
+        </p>
       </div>
-      <div class="editor-tabs">
-        <div class="etab active">main.py</div>
-        <div class="etab">utils.js</div>
-        <div class="etab">README.md</div>
-      </div>
-      <div class="editor-users">
-        <div class="eu-avatar" style="background:#22d3ee">S</div>
-        <div class="eu-avatar" style="background:#a78bfa">A</div>
-        <div class="eu-avatar" style="background:#34d399">M</div>
-        <div class="eu-live"><span class="live-blink"></span> 3 live</div>
-      </div>
-    </div>
-    <div class="editor-body">
-      <div class="line-nums">
-        <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
-        <span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
-        <span>11</span><span>12</span><span>13</span><span>14</span>
-      </div>
-      <div class="code-area">
-        <div class="code-line"><span class="kw">from</span> shareyou <span class="kw">import</span> <span class="fn">Room</span>, <span class="fn">sync</span></div>
-        <div class="code-line"></div>
-        <div class="code-line"><span class="cm"># Create a real-time collaboration room</span></div>
-        <div class="code-line"><span class="fn">room</span> = <span class="fn">Room</span>(<span class="str">"my-workspace"</span>, secure=<span class="kw">True</span>)</div>
-        <div class="code-line"></div>
-        <div class="code-line"><span class="kw">@sync</span>.on_join</div>
-        <div class="code-line"><span class="kw">def</span> <span class="fn">on_user_join</span>(user):</div>
-        <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">room</span>.broadcast(<span class="str">f"{user.name} joined"</span>)</div>
-        <div class="code-line"></div>
-        <div class="code-line"><span class="kw">@sync</span>.on_share</div>
-        <div class="code-line"><span class="kw">def</span> <span class="fn">handle_file</span>(file):</div>
-        <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;link = <span class="fn">room</span>.generate_link(file)</div>
-        <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> {<span class="str">"url"</span>: link, <span class="str">"qr"</span>: <span class="kw">True</span>}</div>
-        <div class="code-line code-cursor-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="editor-cursor">|</span></div>
-      </div>
-    </div>
-    <div class="editor-statusbar">
-      <div class="esb-left">
-        <span class="esb-item"><i class="fa-solid fa-circle" style="color:#34d399"></i> Connected</span>
-        <span class="esb-item">Python 3.12</span>
-        <span class="esb-item">UTF-8</span>
-      </div>
-      <div class="esb-right">
-        <span class="esb-item"><i class="fa-solid fa-rotate"></i> Auto-sync on</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════ DASHBOARD ═══════════════ -->
-<section class="dashboard-section" id="dashboard">
-  <div class="section-header">
-    <div class="section-tag">Dashboard</div>
-    <h2 class="section-title">Your activity at a glance</h2>
-    <p class="section-sub">Monitor shares, rooms, and collaboration in realtime.</p>
-  </div>
-  <div class="dash-grid">
-    <div class="dash-stat">
-      <div class="ds-icon" style="--c:#22d3ee"><i class="fa-solid fa-file-arrow-up"></i></div>
-      <div class="ds-val">1,247</div>
-      <div class="ds-label">Files Shared</div>
-      <div class="ds-trend up">↑ 14% this week</div>
-    </div>
-    <div class="dash-stat">
-      <div class="ds-icon" style="--c:#a78bfa"><i class="fa-solid fa-users"></i></div>
-      <div class="ds-val">38</div>
-      <div class="ds-label">Active Rooms</div>
-      <div class="ds-trend up">↑ 6 new today</div>
-    </div>
-    <div class="dash-stat">
-      <div class="ds-icon" style="--c:#34d399"><i class="fa-solid fa-bolt"></i></div>
-      <div class="ds-val">99.9%</div>
-      <div class="ds-label">Uptime</div>
-      <div class="ds-trend up">All systems go</div>
-    </div>
-    <div class="dash-stat">
-      <div class="ds-icon" style="--c:#fb923c"><i class="fa-solid fa-globe"></i></div>
-      <div class="ds-val">12</div>
-      <div class="ds-label">Devices Connected</div>
-      <div class="ds-trend">Across 4 regions</div>
-    </div>
-  </div>
-  <div class="rooms-panel">
-    <div class="rp-header">
-      <span>Active Rooms</span>
-      <button class="rp-new-btn"><i class="fa-solid fa-plus"></i> New Room</button>
-    </div>
-    <div class="rooms-list">
-      <div class="room-row">
-        <div class="rr-dot live"></div>
-        <div class="rr-info"><div class="rr-name">Design Sprint #4</div><div class="rr-meta">Files · Code · Text</div></div>
-        <div class="rr-avatars">
-          <div class="rra" style="background:#22d3ee">S</div>
-          <div class="rra" style="background:#a78bfa">A</div>
-          <div class="rra" style="background:#f472b6">M</div>
+      <div class="editor-mockup">
+        <div class="editor-chrome">
+          <div class="editor-dots">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+          </div>
+          <div class="editor-tabs">
+            <div class="etab active">main.py</div>
+            <div class="etab">utils.js</div>
+            <div class="etab">README.md</div>
+          </div>
+          <div class="editor-users">
+            <div class="eu-avatar" style="background: #22d3ee">S</div>
+            <div class="eu-avatar" style="background: #a78bfa">A</div>
+            <div class="eu-avatar" style="background: #34d399">M</div>
+            <div class="eu-live"><span class="live-blink"></span> 3 live</div>
+          </div>
         </div>
-        <div class="rr-action">Join →</div>
-      </div>
-      <div class="room-row">
-        <div class="rr-dot live"></div>
-        <div class="rr-info"><div class="rr-name">Backend API Review</div><div class="rr-meta">Code · Text</div></div>
-        <div class="rr-avatars">
-          <div class="rra" style="background:#34d399">K</div>
-          <div class="rra" style="background:#fb923c">R</div>
+        <div class="editor-body">
+          <div class="line-nums">
+            <span>1</span><span>2</span><span>3</span><span>4</span
+            ><span>5</span> <span>6</span><span>7</span><span>8</span
+            ><span>9</span><span>10</span> <span>11</span><span>12</span
+            ><span>13</span><span>14</span>
+          </div>
+          <div class="code-area">
+            <div class="code-line">
+              <span class="kw">from</span> shareyou
+              <span class="kw">import</span> <span class="fn">Room</span>,
+              <span class="fn">sync</span>
+            </div>
+            <div class="code-line"></div>
+            <div class="code-line">
+              <span class="cm"># Create a real-time collaboration room</span>
+            </div>
+            <div class="code-line">
+              <span class="fn">room</span> = <span class="fn">Room</span>(<span
+                class="str"
+                >"my-workspace"</span
+              >, secure=<span class="kw">True</span>)
+            </div>
+            <div class="code-line"></div>
+            <div class="code-line"><span class="kw">@sync</span>.on_join</div>
+            <div class="code-line">
+              <span class="kw">def</span>
+              <span class="fn">on_user_join</span>(user):
+            </div>
+            <div class="code-line">
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">room</span
+              >.broadcast(<span class="str">f"{user.name} joined"</span>)
+            </div>
+            <div class="code-line"></div>
+            <div class="code-line"><span class="kw">@sync</span>.on_share</div>
+            <div class="code-line">
+              <span class="kw">def</span>
+              <span class="fn">handle_file</span>(file):
+            </div>
+            <div class="code-line">
+              &nbsp;&nbsp;&nbsp;&nbsp;link =
+              <span class="fn">room</span>.generate_link(file)
+            </div>
+            <div class="code-line">
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> {<span
+                class="str"
+                >"url"</span
+              >: link, <span class="str">"qr"</span>:
+              <span class="kw">True</span>}
+            </div>
+            <div class="code-line code-cursor-line">
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="editor-cursor">|</span>
+            </div>
+          </div>
         </div>
-        <div class="rr-action">Join →</div>
-      </div>
-      <div class="room-row idle">
-        <div class="rr-dot"></div>
-        <div class="rr-info"><div class="rr-name">Marketing Assets</div><div class="rr-meta">Files</div></div>
-        <div class="rr-avatars"><div class="rra" style="background:#60a5fa">J</div></div>
-        <div class="rr-action">Open →</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════ FOOTER ═══════════════ -->
-<footer class="footer" id="footer">
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <div class="brand">
-        <div class="brand-icon">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
-            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-          </svg>
+        <div class="editor-statusbar">
+          <div class="esb-left">
+            <span class="esb-item"
+              ><i class="fa-solid fa-circle" style="color: #34d399"></i>
+              Connected</span
+            >
+            <span class="esb-item">Python 3.12</span>
+            <span class="esb-item">UTF-8</span>
+          </div>
+          <div class="esb-right">
+            <span class="esb-item"
+              ><i class="fa-solid fa-rotate"></i> Auto-sync on</span
+            >
+          </div>
         </div>
-        <span class="brand-name">ShareYou</span>
       </div>
-      <p class="footer-tagline">The collaboration platform built for modern teams.</p>
-      <div class="footer-socials">
-        <a href="https://www.linkedin.com/in/sushantsharma14" class="fsoc" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-        <a href="https://github.com/CodeBySushant" class="fsoc" aria-label="GitHub"><i class="fab fa-github"></i></a>
-        <a href="https://instagram.com/lifeofsushant" class="fsoc" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-        <a href="https://www.youtube.com/c/codewithsushant" class="fsoc" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-      </div>
-    </div>
-    <div class="footer-links">
-      <div class="fl-col">
-        <div class="fl-heading">Product</div>
-        <a href="#features">Features</a>
-        <a href="#workspace">Workspace</a>
-        <a href="#code-editor">Code Share</a>
-        <a href="#dashboard">Dashboard</a>
-      </div>
-      <div class="fl-col">
-        <div class="fl-heading">Company</div>
-        <a href="about.html">About</a>
-        <a href="#">Blog</a>
-        <a href="#">Careers</a>
-        <a href="#">Contact</a>
-      </div>
-      <div class="fl-col">
-        <div class="fl-heading">Legal</div>
-        <a href="#">Privacy</a>
-        <a href="#">Terms</a>
-        <a href="#">Security</a>
-        <a href="#">Cookies</a>
-      </div>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <div class="footer-sep"></div>
-    <div class="footer-copy">
-      <span>© 2025 ShareYou. Developed by Sushant Sharma.</span>
-      <span class="footer-status"><span class="status-dot"></span> All systems operational</span>
-    </div>
-  </div>
-</footer>
+    </section>
 
-<div class="toast" id="toast"></div>
-<script src="main.js"></script>
-</body>
+    <!-- ═══════════════ DASHBOARD ═══════════════ -->
+    <section class="dashboard-section" id="dashboard">
+      <div class="section-header">
+        <div class="section-tag">Dashboard</div>
+        <h2 class="section-title">Your activity at a glance</h2>
+        <p class="section-sub">
+          Monitor shares, rooms, and collaboration in realtime.
+        </p>
+      </div>
+      <div class="dash-grid">
+        <div class="dash-stat">
+          <div class="ds-icon" style="--c: #22d3ee">
+            <i class="fa-solid fa-file-arrow-up"></i>
+          </div>
+          <div class="ds-val" id="stat-files">—</div>
+          <div class="ds-label">Files Shared</div>
+          <div class="ds-trend up" id="stat-files-trend">&nbsp;</div>
+        </div>
+        <div class="dash-stat">
+          <div class="ds-icon" style="--c: #a78bfa">
+            <i class="fa-solid fa-users"></i>
+          </div>
+          <div class="ds-val" id="stat-rooms">—</div>
+          <div class="ds-label">Active Rooms</div>
+          <div class="ds-trend up" id="stat-rooms-trend">&nbsp;</div>
+        </div>
+        <div class="dash-stat">
+          <div class="ds-icon" style="--c: #34d399">
+            <i class="fa-solid fa-bolt"></i>
+          </div>
+          <div class="ds-val" id="stat-uptime">—</div>
+          <div class="ds-label">Uptime</div>
+          <div class="ds-trend up">All systems go</div>
+        </div>
+        <div class="dash-stat">
+          <div class="ds-icon" style="--c: #fb923c">
+            <i class="fa-solid fa-globe"></i>
+          </div>
+          <div class="ds-val" id="stat-devices">—</div>
+          <div class="ds-label">Live Connections</div>
+          <div class="ds-trend" id="stat-devices-trend">&nbsp;</div>
+        </div>
+      </div>
+      <div class="rooms-panel">
+        <div class="rp-header">
+          <span>Active Rooms</span>
+          <button class="rp-new-btn">
+            <i class="fa-solid fa-plus"></i> New Room
+          </button>
+        </div>
+        <div class="rooms-list">
+          <div class="room-row">
+            <div class="rr-dot live"></div>
+            <div class="rr-info">
+              <div class="rr-name">Design Sprint #4</div>
+              <div class="rr-meta">Files · Code · Text</div>
+            </div>
+            <div class="rr-avatars">
+              <div class="rra" style="background: #22d3ee">S</div>
+              <div class="rra" style="background: #a78bfa">A</div>
+              <div class="rra" style="background: #f472b6">M</div>
+            </div>
+            <div class="rr-action">Join →</div>
+          </div>
+          <div class="room-row">
+            <div class="rr-dot live"></div>
+            <div class="rr-info">
+              <div class="rr-name">Backend API Review</div>
+              <div class="rr-meta">Code · Text</div>
+            </div>
+            <div class="rr-avatars">
+              <div class="rra" style="background: #34d399">K</div>
+              <div class="rra" style="background: #fb923c">R</div>
+            </div>
+            <div class="rr-action">Join →</div>
+          </div>
+          <div class="room-row idle">
+            <div class="rr-dot"></div>
+            <div class="rr-info">
+              <div class="rr-name">Marketing Assets</div>
+              <div class="rr-meta">Files</div>
+            </div>
+            <div class="rr-avatars">
+              <div class="rra" style="background: #60a5fa">J</div>
+            </div>
+            <div class="rr-action">Open →</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ FOOTER ═══════════════ -->
+    <footer class="footer" id="footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <div class="brand">
+            <div class="brand-icon">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="18" cy="5" r="3" />
+                <circle cx="6" cy="12" r="3" />
+                <circle cx="18" cy="19" r="3" />
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+              </svg>
+            </div>
+            <span class="brand-name">ShareYou</span>
+          </div>
+          <p class="footer-tagline">
+            The collaboration platform built for modern teams.
+          </p>
+          <div class="footer-socials">
+            <a
+              href="https://www.linkedin.com/in/sushantsharma14"
+              class="fsoc"
+              aria-label="LinkedIn"
+              ><i class="fab fa-linkedin-in"></i
+            ></a>
+            <a
+              href="https://github.com/CodeBySushant"
+              class="fsoc"
+              aria-label="GitHub"
+              ><i class="fab fa-github"></i
+            ></a>
+            <a
+              href="https://instagram.com/lifeofsushant"
+              class="fsoc"
+              aria-label="Instagram"
+              ><i class="fab fa-instagram"></i
+            ></a>
+            <a
+              href="https://www.youtube.com/c/codewithsushant"
+              class="fsoc"
+              aria-label="YouTube"
+              ><i class="fab fa-youtube"></i
+            ></a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <div class="fl-col">
+            <div class="fl-heading">Product</div>
+            <a href="#features">Features</a>
+            <a href="#workspace">Workspace</a>
+            <a href="#code-editor">Code Share</a>
+            <a href="#dashboard">Dashboard</a>
+          </div>
+          <div class="fl-col">
+            <div class="fl-heading">Company</div>
+            <a href="about.html">About</a>
+            <a href="#">Blog</a>
+            <a href="#">Careers</a>
+            <a href="#">Contact</a>
+          </div>
+          <div class="fl-col">
+            <div class="fl-heading">Legal</div>
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Security</a>
+            <a href="#">Cookies</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-sep"></div>
+        <div class="footer-copy">
+          <span>© 2025 ShareYou. Developed by Sushant Sharma.</span>
+          <span class="footer-status"
+            ><span class="status-dot"></span> All systems operational</span
+          >
+        </div>
+      </div>
+    </footer>
+
+    <div class="toast" id="toast"></div>
+    <script src="main.js"></script>
+  </body>
 </html>
