@@ -19,6 +19,127 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link rel="stylesheet" href="styles.css" />
     <link rel="icon" type="image/png" href="favicon.ico" />
+
+    <style>
+      /* ── Dynamic rooms empty state ── */
+      .rooms-empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2.5rem 1.5rem;
+        gap: 0.5rem;
+        text-align: center;
+      }
+      .re-icon {
+        font-size: 1.75rem;
+        color: var(--border2);
+        margin-bottom: 0.25rem;
+      }
+      .re-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--subtle);
+      }
+      .re-sub {
+        font-size: 0.8rem;
+        color: var(--muted);
+        max-width: 280px;
+        line-height: 1.5;
+      }
+      .re-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        margin-top: 0.75rem;
+        padding: 0.55rem 1.2rem;
+        background: linear-gradient(135deg, var(--cyan), var(--purple));
+        color: var(--bg);
+        font-size: 0.82rem;
+        font-weight: 600;
+        font-family: var(--font);
+        border-radius: 99px;
+        text-decoration: none;
+        transition: opacity 0.2s, transform 0.2s;
+      }
+      .re-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+      /* ── Room people count ── */
+      .rr-people {
+        font-size: 0.75rem;
+        color: var(--muted);
+        white-space: nowrap;
+        margin-right: 0.5rem;
+      }
+
+      /* ── Code section CTA banner ── */
+      .code-cta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-top: 1.75rem;
+        padding: 1.25rem 1.75rem;
+        background: rgba(34,211,238,0.04);
+        border: 1px solid rgba(34,211,238,0.15);
+        border-radius: var(--radius-lg);
+        flex-wrap: wrap;
+      }
+      .code-cta-text {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+      }
+      .code-cta-text strong {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--text);
+      }
+      .code-cta-text span {
+        font-size: 0.82rem;
+        color: var(--muted);
+      }
+      .code-cta-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.7rem 1.5rem;
+        background: linear-gradient(135deg, var(--cyan), var(--purple));
+        color: var(--bg);
+        font-size: 0.88rem;
+        font-weight: 700;
+        font-family: var(--font);
+        border-radius: 99px;
+        text-decoration: none;
+        white-space: nowrap;
+        transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+        flex-shrink: 0;
+      }
+      .code-cta-btn:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 28px rgba(34,211,238,0.25);
+      }
+
+      /* ── Rooms loading skeleton ── */
+      .rooms-loading {
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .rooms-skeleton {
+        height: 52px;
+        border-radius: var(--radius-sm);
+        background: linear-gradient(90deg, var(--border) 25%, rgba(255,255,255,0.04) 50%, var(--border) 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.4s infinite;
+      }
+      @keyframes shimmer {
+        0%   { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+      }
+    </style>
   </head>
   <body>
     <!-- ═══════════════ NAVBAR ═══════════════ -->
@@ -352,36 +473,7 @@
               Recent Shares
             </div>
             <div class="recent-list" id="recent-list">
-              <div class="recent-item">
-                <div class="ri-icon file-pdf">
-                  <i class="fa-solid fa-file-pdf"></i>
-                </div>
-                <div class="ri-info">
-                  <div class="ri-name">proposal_final.pdf</div>
-                  <div class="ri-meta">2 min ago · 4.2 MB</div>
-                </div>
-                <div class="ri-status done">Shared</div>
-              </div>
-              <div class="recent-item">
-                <div class="ri-icon file-img">
-                  <i class="fa-solid fa-image"></i>
-                </div>
-                <div class="ri-info">
-                  <div class="ri-name">screenshot.png</div>
-                  <div class="ri-meta">18 min ago · 1.1 MB</div>
-                </div>
-                <div class="ri-status done">Shared</div>
-              </div>
-              <div class="recent-item">
-                <div class="ri-icon file-code">
-                  <i class="fa-solid fa-file-code"></i>
-                </div>
-                <div class="ri-info">
-                  <div class="ri-name">main.py</div>
-                  <div class="ri-meta">1 hr ago · 22 KB</div>
-                </div>
-                <div class="ri-status done">Shared</div>
-              </div>
+              <!-- Populated by main.js -->
             </div>
           </div>
           <div class="sidebar-card">
@@ -444,51 +536,20 @@
             ><span>13</span><span>14</span>
           </div>
           <div class="code-area">
-            <div class="code-line">
-              <span class="kw">from</span> shareyou
-              <span class="kw">import</span> <span class="fn">Room</span>,
-              <span class="fn">sync</span>
-            </div>
+            <div class="code-line"><span class="kw">from</span> shareyou <span class="kw">import</span> <span class="fn">Room</span>, <span class="fn">sync</span></div>
             <div class="code-line"></div>
-            <div class="code-line">
-              <span class="cm"># Create a real-time collaboration room</span>
-            </div>
-            <div class="code-line">
-              <span class="fn">room</span> = <span class="fn">Room</span>(<span
-                class="str"
-                >"my-workspace"</span
-              >, secure=<span class="kw">True</span>)
-            </div>
+            <div class="code-line"><span class="cm"># Create a real-time collaboration room</span></div>
+            <div class="code-line"><span class="fn">room</span> = <span class="fn">Room</span>(<span class="str">"my-workspace"</span>, secure=<span class="kw">True</span>)</div>
             <div class="code-line"></div>
             <div class="code-line"><span class="kw">@sync</span>.on_join</div>
-            <div class="code-line">
-              <span class="kw">def</span>
-              <span class="fn">on_user_join</span>(user):
-            </div>
-            <div class="code-line">
-              &nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">room</span
-              >.broadcast(<span class="str">f"{user.name} joined"</span>)
-            </div>
+            <div class="code-line"><span class="kw">def</span> <span class="fn">on_user_join</span>(user):</div>
+            <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">room</span>.broadcast(<span class="str">f"{user.name} joined"</span>)</div>
             <div class="code-line"></div>
             <div class="code-line"><span class="kw">@sync</span>.on_share</div>
-            <div class="code-line">
-              <span class="kw">def</span>
-              <span class="fn">handle_file</span>(file):
-            </div>
-            <div class="code-line">
-              &nbsp;&nbsp;&nbsp;&nbsp;link =
-              <span class="fn">room</span>.generate_link(file)
-            </div>
-            <div class="code-line">
-              &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> {<span
-                class="str"
-                >"url"</span
-              >: link, <span class="str">"qr"</span>:
-              <span class="kw">True</span>}
-            </div>
-            <div class="code-line code-cursor-line">
-              &nbsp;&nbsp;&nbsp;&nbsp;<span class="editor-cursor">|</span>
-            </div>
+            <div class="code-line"><span class="kw">def</span> <span class="fn">handle_file</span>(file):</div>
+            <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;link = <span class="fn">room</span>.generate_link(file)</div>
+            <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> {<span class="str">"url"</span>: link, <span class="str">"qr"</span>: <span class="kw">True</span>}</div>
+            <div class="code-line code-cursor-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="editor-cursor">|</span></div>
           </div>
         </div>
         <div class="editor-statusbar">
@@ -506,6 +567,18 @@
             >
           </div>
         </div>
+      </div>
+
+      <!-- ── CTA below the mockup ── -->
+      <div class="code-cta">
+        <div class="code-cta-text">
+          <strong>Ready to try it yourself?</strong>
+          <span>Create a room, get a shareable link, and start coding together live.</span>
+        </div>
+        <a href="codeshare.html" class="code-cta-btn">
+          <i class="fa-solid fa-circle-plus"></i>
+          Start Sharing Code
+        </a>
       </div>
     </section>
 
@@ -552,6 +625,8 @@
           <div class="ds-trend" id="stat-devices-trend">&nbsp;</div>
         </div>
       </div>
+
+      <!-- ── Rooms panel — dynamic ── -->
       <div class="rooms-panel">
         <div class="rp-header">
           <span>Active Rooms</span>
@@ -559,42 +634,12 @@
             <i class="fa-solid fa-plus"></i> New Room
           </button>
         </div>
-        <div class="rooms-list">
-          <div class="room-row">
-            <div class="rr-dot live"></div>
-            <div class="rr-info">
-              <div class="rr-name">Design Sprint #4</div>
-              <div class="rr-meta">Files · Code · Text</div>
-            </div>
-            <div class="rr-avatars">
-              <div class="rra" style="background: #22d3ee">S</div>
-              <div class="rra" style="background: #a78bfa">A</div>
-              <div class="rra" style="background: #f472b6">M</div>
-            </div>
-            <div class="rr-action">Join →</div>
-          </div>
-          <div class="room-row">
-            <div class="rr-dot live"></div>
-            <div class="rr-info">
-              <div class="rr-name">Backend API Review</div>
-              <div class="rr-meta">Code · Text</div>
-            </div>
-            <div class="rr-avatars">
-              <div class="rra" style="background: #34d399">K</div>
-              <div class="rra" style="background: #fb923c">R</div>
-            </div>
-            <div class="rr-action">Join →</div>
-          </div>
-          <div class="room-row idle">
-            <div class="rr-dot"></div>
-            <div class="rr-info">
-              <div class="rr-name">Marketing Assets</div>
-              <div class="rr-meta">Files</div>
-            </div>
-            <div class="rr-avatars">
-              <div class="rra" style="background: #60a5fa">J</div>
-            </div>
-            <div class="rr-action">Open →</div>
+        <!-- Skeleton shown until JS populates -->
+        <div class="rooms-list" id="rooms-list">
+          <div class="rooms-loading">
+            <div class="rooms-skeleton"></div>
+            <div class="rooms-skeleton" style="opacity:.6"></div>
+            <div class="rooms-skeleton" style="opacity:.35"></div>
           </div>
         </div>
       </div>
@@ -629,30 +674,10 @@
             The collaboration platform built for modern teams.
           </p>
           <div class="footer-socials">
-            <a
-              href="https://www.linkedin.com/in/sushantsharma14"
-              class="fsoc"
-              aria-label="LinkedIn"
-              ><i class="fab fa-linkedin-in"></i
-            ></a>
-            <a
-              href="https://github.com/CodeBySushant"
-              class="fsoc"
-              aria-label="GitHub"
-              ><i class="fab fa-github"></i
-            ></a>
-            <a
-              href="https://instagram.com/lifeofsushant"
-              class="fsoc"
-              aria-label="Instagram"
-              ><i class="fab fa-instagram"></i
-            ></a>
-            <a
-              href="https://www.youtube.com/c/codewithsushant"
-              class="fsoc"
-              aria-label="YouTube"
-              ><i class="fab fa-youtube"></i
-            ></a>
+            <a href="https://www.linkedin.com/in/sushantsharma14" class="fsoc" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="https://github.com/CodeBySushant" class="fsoc" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://instagram.com/lifeofsushant" class="fsoc" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.youtube.com/c/codewithsushant" class="fsoc" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
           </div>
         </div>
         <div class="footer-links">

@@ -151,8 +151,10 @@ zone.addEventListener('drop', e => {
   Array.from(e.dataTransfer.files).forEach(file => uploadFile(file));
 });
 
-// ─── Paste anywhere ───
+// ─── Paste anywhere (but not inside inputs/textareas) ───
 document.addEventListener('paste', e => {
+  const tag = e.target.tagName;
+  if (tag === 'INPUT' || tag === 'TEXTAREA') return;
   const items = e.clipboardData?.items;
   if (!items) return;
   for (const item of items) {
@@ -167,7 +169,7 @@ document.addEventListener('paste', e => {
 async function loadRecentFiles() {
   try {
     const response = await fetch('/recent-files');
-    if (!response.ok) return;
+    if (!response.ok) throw new Error('Failed');
 
     const files = await response.json();
     const recentList = document.getElementById('recent-list');
@@ -189,7 +191,6 @@ async function loadRecentFiles() {
       else if (['mp4','mov','avi','mkv'].includes(ext))               { iconClass = 'file-code'; iconTag = 'fa-file-video'; }
       else if (['zip','tar','gz','rar'].includes(ext))                { iconClass = 'file-code'; iconTag = 'fa-file-zipper'; }
 
-      // Time ago
       const uploaded = new Date(file.uploaded_at);
       const diffMin  = Math.round((Date.now() - uploaded) / 60000);
       let timeAgo    = diffMin < 1 ? 'Just now' : diffMin < 60 ? `${diffMin}m ago` : diffMin < 1440 ? `${Math.floor(diffMin/60)}h ago` : `${Math.floor(diffMin/1440)}d ago`;
@@ -215,7 +216,10 @@ async function loadRecentFiles() {
       recentList.appendChild(item);
     });
   } catch (err) {
-    console.error('Failed to load recent files:', err);
+    const recentList = document.getElementById('recent-list');
+    if (recentList) {
+      recentList.innerHTML = '<div style="padding:0.75rem;font-size:0.8rem;color:var(--muted);text-align:center;">Could not load recent files</div>';
+    }
   }
 }
 
@@ -235,7 +239,6 @@ async function loadStats() {
     set('stat-devices', data.live_viewers);
     set('stat-uptime',  data.uptime_days !== null ? (data.uptime_days > 0 ? `${data.uptime_days}d` : '< 1d') : '99.9%');
 
-    // Trend labels
     set('stat-rooms-trend',   `↑ ${data.rooms_24h} new today`);
     set('stat-devices-trend', `${data.live_viewers} connected now`);
 
@@ -247,16 +250,101 @@ async function loadStats() {
 }
 
 loadStats();
-// Refresh stats every 30 seconds
-setInterval(loadStats, 30000);
+const _statsInterval = setInterval(loadStats, 30000);
+window.addEventListener('beforeunload', () => clearInterval(_statsInterval));
 
-// ─── Quick action buttons ─── FIX: navigate to codeshare instead of "coming soon"
+// ─── Load dynamic active rooms ─────────────────────────────────────────────
+function langIcon(lang) {
+  const map = {
+    python: 'fa-python', javascript: 'fa-js', typescript: 'fa-js',
+    html: 'fa-html5', css: 'fa-css3-alt', bash: 'fa-terminal',
+    sql: 'fa-database', markdown: 'fa-file-lines',
+  };
+  const brand = ['python','javascript','typescript','html','css'];
+  const prefix = brand.includes(lang) ? 'fa-brands' : 'fa-solid';
+  const icon = map[lang] || 'fa-code';
+  return `<i class="${prefix} ${icon}"></i>`;
+}
+
+function timeAgo(isoStr) {
+  const diff = Math.round((Date.now() - new Date(isoStr)) / 60000);
+  if (diff < 1) return 'Just now';
+  if (diff < 60) return `${diff}m ago`;
+  if (diff < 1440) return `${Math.floor(diff / 60)}h ago`;
+  return `${Math.floor(diff / 1440)}d ago`;
+}
+
+async function loadRooms() {
+  const list = document.getElementById('rooms-list');
+  if (!list) return;
+
+  try {
+    const res = await fetch('/rooms');
+    if (!res.ok) throw new Error('Failed');
+    const rooms = await res.json();
+
+    list.innerHTML = '';
+
+    if (rooms.length === 0) {
+      list.innerHTML = `
+        <div class="rooms-empty">
+          <div class="re-icon"><i class="fa-solid fa-door-open"></i></div>
+          <div class="re-title">No active rooms right now</div>
+          <div class="re-sub">Create a room to start sharing code or text live.</div>
+          <a href="codeshare.html" class="re-btn">
+            <i class="fa-solid fa-circle-plus"></i> Create a Room
+          </a>
+        </div>`;
+      return;
+    }
+
+    rooms.forEach(room => {
+      const row = document.createElement('div');
+      row.className = 'room-row';
+      const people = room.total;
+      const peopleLabel = people === 1 ? '1 person' : `${people} people`;
+
+      row.innerHTML = `
+        <div class="rr-dot live"></div>
+        <div class="rr-info">
+          <div class="rr-name">${escapeHtml(room.title)}</div>
+          <div class="rr-meta">
+            ${langIcon(room.language)}
+            ${room.language}
+            ${room.has_password ? '&nbsp;·&nbsp;<i class="fa-solid fa-lock" style="font-size:0.65rem;color:var(--muted)"></i>' : ''}
+            &nbsp;·&nbsp;${timeAgo(room.created_at)}
+          </div>
+        </div>
+        <div class="rr-people">${peopleLabel}</div>
+        <div class="rr-action" onclick="openRoom('${room.room_id}')">Join →</div>
+      `;
+      list.appendChild(row);
+    });
+  } catch (err) {
+    list.innerHTML = `
+      <div style="padding:1.25rem 1.5rem;font-size:0.82rem;color:var(--muted);text-align:center;">
+        Could not load rooms — is the server running?
+      </div>`;
+  }
+}
+
+function openRoom(roomId) {
+  window.location.href = `codeshare.html?room=${roomId}`;
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+loadRooms();
+const _roomsInterval = setInterval(loadRooms, 15000);
+window.addEventListener('beforeunload', () => clearInterval(_roomsInterval));
+
+// ─── Quick action buttons ───
 document.querySelectorAll('.qa-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     const label = btn.textContent.trim();
-    if (label.includes('Code Share') || label.includes('Text Share')) {
-      window.location.href = 'codeshare.html';
-    } else if (label.includes('New Room')) {
+    if (label.includes('Code Share') || label.includes('Text Share') || label.includes('New Room')) {
       window.location.href = 'codeshare.html';
     } else if (label.includes('QR Scan')) {
       showToast('Point your camera at a ShareYou QR code to open it.');
@@ -266,15 +354,11 @@ document.querySelectorAll('.qa-btn').forEach(btn => {
   });
 });
 
-// ─── Dashboard room buttons ───
+// ─── Dashboard "New Room" button ───
 document.querySelectorAll('.rp-new-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     window.location.href = 'codeshare.html';
   });
-});
-
-document.querySelectorAll('.rr-action').forEach(btn => {
-  btn.addEventListener('click', () => showToast('Collaborative rooms — coming soon!'));
 });
 
 // ─── Editor tabs ───

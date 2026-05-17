@@ -63,6 +63,9 @@ class ConnectionManager:
     def viewer_count(self, room_id: str) -> int:
         return sum(1 for c in self.rooms.get(room_id, []) if c["role"] == "viewer")
 
+    def editor_count(self, room_id: str) -> int:
+        return sum(1 for c in self.rooms.get(room_id, []) if c["role"] == "editor")
+
     def live_room_ids(self) -> List[str]:
         return list(self.rooms.keys())
 
@@ -74,15 +77,13 @@ manager = ConnectionManager()
 
 
 # ─── Background cleanup task ───────────────────────────────────────────────────
-# Runs every hour; deletes expired CodeRoom rows and orphaned uploaded files
 async def cleanup_loop():
     while True:
-        await asyncio.sleep(3600)  # wait 1 hour between runs
+        await asyncio.sleep(3600)
         try:
             db = SessionLocal()
             now = datetime.utcnow()
 
-            # 1. Delete expired code rooms
             expired_rooms = (
                 db.query(CodeRoom)
                 .filter(CodeRoom.expires_at != None, CodeRoom.expires_at < now)
@@ -93,7 +94,6 @@ async def cleanup_loop():
             if expired_rooms:
                 print(f"[cleanup] Deleted {len(expired_rooms)} expired code room(s)")
 
-            # 2. Delete file records older than 7 days + remove files from disk
             cutoff = now - timedelta(days=7)
             old_files = (
                 db.query(FileModel)
@@ -116,13 +116,11 @@ async def cleanup_loop():
             print(f"[cleanup] Error during cleanup: {e}")
 
 
-# ─── Lifespan: start/stop background tasks cleanly ────────────────────────────
+# ─── Lifespan ─────────────────────────────────────────────────────────────────
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup
     task = asyncio.create_task(cleanup_loop())
     yield
-    # Shutdown
     task.cancel()
     try:
         await task
@@ -235,6 +233,42 @@ async def get_stats(db: Session = Depends(get_db)):
     }
 
 
+# ─── NEW: Active rooms list endpoint ──────────────────────────────────────────
+@app.get("/rooms")
+async def get_active_rooms(db: Session = Depends(get_db)):
+    """
+    Returns rooms that currently have at least one live WebSocket connection,
+    enriched with metadata from the DB (title, language, created_at).
+    """
+    live_ids = manager.live_room_ids()
+    if not live_ids:
+        return []
+
+    rooms = db.query(CodeRoom).filter(CodeRoom.room_id.in_(live_ids)).all()
+
+    result = []
+    for room in rooms:
+        # Skip expired rooms
+        if room.expires_at and datetime.utcnow() > room.expires_at:
+            continue
+        viewers = manager.viewer_count(room.room_id)
+        editors = manager.editor_count(room.room_id)
+        result.append({
+            "room_id":      room.room_id,
+            "title":        room.title or "Untitled",
+            "language":     room.language or "plaintext",
+            "has_password": room.password_hash is not None,
+            "viewers":      viewers,
+            "editors":      editors,
+            "total":        viewers + editors,
+            "created_at":   room.created_at.isoformat(),
+        })
+
+    # Most recently active (most connections) first
+    result.sort(key=lambda r: r["total"], reverse=True)
+    return result
+
+
 # ─── Code rooms ───────────────────────────────────────────────────────────────
 def _hash(pw: str) -> str:
     return hashlib.sha256(pw.encode()).hexdigest()
@@ -345,8 +379,6 @@ async def code_ws(
                     if msg.get("type") == "update":
                         new_content = msg.get("content", "")
                         room.content = new_content
-                        # FIX: explicitly set updated_at; the before_update
-                        # event listener in models.py also stamps it
                         room.updated_at = datetime.utcnow()
                         db.commit()
 
