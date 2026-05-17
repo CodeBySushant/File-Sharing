@@ -1,139 +1,820 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About Us</title>
-
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-<style>
-    * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>About — ShareYou</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="icon" type="image/png" href="favicon.ico" />
+  <style>
+    :root {
+      --bg:       #060810;
+      --surface:  #0d1117;
+      --surface2: #131820;
+      --border:   rgba(255,255,255,0.07);
+      --border2:  rgba(255,255,255,0.12);
+      --text:     #e2e8f0;
+      --muted:    #64748b;
+      --subtle:   #94a3b8;
+      --cyan:     #22d3ee;
+      --purple:   #a78bfa;
+      --green:    #34d399;
+      --orange:   #fb923c;
+      --blue:     #60a5fa;
+      --font:     'Sora', system-ui, sans-serif;
+      --mono:     'JetBrains Mono', monospace;
+      --radius:   14px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
     }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
     body {
-    font-family: 'Poppins', sans-serif;
-    line-height: 1.6;
-    background-color: #f4f4f4;
-    color: #333;
-      padding-top: 50px;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.6;
     }
 
-    header {
-    background-color: #0072c6;
-    color: #fff;
-    text-align: center;
-    padding: 50px 20px;
+    ::selection { background: rgba(34,211,238,0.25); }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--surface); }
+    ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 99px; }
+
+    /* ─── Navbar ─── */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 999;
+      padding: 0 2rem;
+      background: rgba(6,8,16,0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
     }
 
-    header h1 {
-    font-size: 3rem;
-    margin-bottom: 10px;
-    font-weight: 600;
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
     }
 
-    header p {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      flex-shrink: 0;
     }
 
-    .about-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+    .brand-icon {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
     }
 
-    .about-section {
-    background-color: #fff;
-    padding: 40px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
-    width: 100%;
+    .brand-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
     }
 
-    .about-section h2 {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-    color: #0072c6;
-    font-weight: 600;
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      flex: 1;
     }
 
-    .about-section p {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    margin-bottom: 20px;
-    color: #555;
+    .nl {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.4rem 0.75rem;
+      border-radius: 8px;
+      transition: color 0.2s, background 0.2s;
     }
 
-    .about-section .quote {
-    font-style: italic;
-    color: #777;
-    font-size: 1.2rem;
-    margin-top: 30px;
+    .nl:hover, .nl.active { color: var(--text); background: rgba(255,255,255,0.05); }
+    .nl.active { color: var(--cyan); }
+
+    .nav-right { display: flex; align-items: center; margin-left: auto; }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1.1rem;
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      color: var(--bg);
+      font-size: 0.875rem;
+      font-weight: 600;
+      font-family: var(--font);
+      border-radius: 99px;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: opacity 0.2s, transform 0.2s;
     }
 
-    .about-section img {
-    width: 100%;
-    border-radius: 8px;
-    margin-top: 30px;
+    .cta-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      margin-left: 0.75rem;
     }
 
-    .cta-button {
-    display: inline-block;
-    background-color: #0072c6;
-    color: #fff;
-    padding: 15px 30px;
-    text-decoration: none;
-    border-radius: 5px;
-    margin-top: 30px;
-    font-size: 1.2rem;
-    transition: background-color 0.3s ease;
+    .hamburger span {
+      display: block;
+      width: 22px; height: 2px;
+      background: var(--subtle);
+      border-radius: 2px;
+      transition: all 0.3s;
     }
 
-    .cta-button:hover {
-    background-color: #005f9e;
+    /* ─── Hero ─── */
+    .about-hero {
+      position: relative;
+      padding: 140px 2rem 80px;
+      overflow: hidden;
+      text-align: center;
     }
 
-    footer {
-    text-align: center;
-    padding: 20px 0;
-    background-color: #0072c6;
-    color: #fff;
-    margin-top: 50px;
+    .about-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.3;
+      pointer-events: none;
     }
-</style>
+
+    .about-orb-1 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, var(--purple), transparent 70%);
+      top: -100px; left: -100px;
+      animation: floatOrb 10s ease-in-out infinite;
+    }
+
+    .about-orb-2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, var(--cyan), transparent 70%);
+      top: 0; right: -100px;
+      animation: floatOrb 10s ease-in-out infinite;
+      animation-delay: -4s;
+    }
+
+    @keyframes floatOrb {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-30px); }
+    }
+
+    .about-grid-overlay {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse at center, black 20%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .about-hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      margin: 0 auto;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .about-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 1rem;
+      background: rgba(167,139,250,0.08);
+      border: 1px solid rgba(167,139,250,0.2);
+      border-radius: 99px;
+      font-size: 0.8rem;
+      color: var(--purple);
+      font-weight: 500;
+      margin-bottom: 2rem;
+    }
+
+    .about-tag-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--purple);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%,100% { opacity: 1; }
+      50%      { opacity: 0.4; }
+    }
+
+    .about-title {
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+      margin-bottom: 1.5rem;
+    }
+
+    .grad-purple {
+      background: linear-gradient(135deg, var(--purple) 0%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .about-lead {
+      font-size: 1.05rem;
+      color: var(--subtle);
+      line-height: 1.8;
+    }
+
+    /* ─── Main content ─── */
+    .about-body {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem 100px;
+    }
+
+    /* Story card */
+    .story-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 3rem;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp 0.8s 0.1s ease both;
+    }
+
+    .story-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--purple), var(--cyan));
+    }
+
+    .story-section-tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--purple);
+      background: rgba(167,139,250,0.08);
+      border: 1px solid rgba(167,139,250,0.2);
+      padding: 0.25rem 0.8rem;
+      border-radius: 99px;
+      margin-bottom: 1.5rem;
+    }
+
+    .story-card h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.25rem;
+      color: var(--text);
+    }
+
+    .story-card p {
+      font-size: 0.95rem;
+      color: var(--subtle);
+      line-height: 1.85;
+      margin-bottom: 1rem;
+    }
+
+    .story-card p:last-child { margin-bottom: 0; }
+
+    /* Quote */
+    .quote-block {
+      margin: 2rem 0 0;
+      padding: 1.5rem 2rem;
+      background: rgba(167,139,250,0.05);
+      border-left: 3px solid var(--purple);
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+
+    .quote-block p {
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--subtle);
+      margin: 0 0 0.5rem;
+    }
+
+    .quote-block cite {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-style: normal;
+      font-weight: 500;
+    }
+
+    /* Builder card (profile) */
+    .builder-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+
+    .builder-hdr {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .builder-avatar {
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #060810;
+      flex-shrink: 0;
+      border: 3px solid rgba(255,255,255,0.08);
+    }
+
+    .builder-info h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    .builder-info p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 0.2rem;
+    }
+
+    .builder-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.25rem 0.75rem;
+      background: rgba(52,211,153,0.08);
+      border: 1px solid rgba(52,211,153,0.2);
+      border-radius: 99px;
+      font-size: 0.72rem;
+      color: var(--green);
+      font-weight: 600;
+      margin-top: 0.4rem;
+    }
+
+    .builder-bio {
+      font-size: 0.9rem;
+      color: var(--subtle);
+      line-height: 1.8;
+      border-top: 1px solid var(--border);
+      padding-top: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .builder-links {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .builder-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.5rem 1rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border2);
+      border-radius: 99px;
+      color: var(--subtle);
+      font-size: 0.82rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+    }
+
+    .builder-link:hover {
+      background: rgba(34,211,238,0.08);
+      border-color: rgba(34,211,238,0.25);
+      color: var(--cyan);
+      transform: translateY(-2px);
+    }
+
+    /* Stats strip */
+    .stats-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+      animation: fadeUp 0.8s 0.3s ease both;
+    }
+
+    .stat-pill {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      text-align: center;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .stat-pill:hover {
+      border-color: var(--border2);
+      transform: translateY(-3px);
+    }
+
+    .stat-icon {
+      font-size: 1.4rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .stat-num {
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    /* Tech stack */
+    .tech-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      animation: fadeUp 0.8s 0.4s ease both;
+    }
+
+    .tech-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--subtle);
+      margin-bottom: 1.25rem;
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .tech-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.7rem 1rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--subtle);
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+
+    .tech-item:hover {
+      background: rgba(34,211,238,0.05);
+      border-color: rgba(34,211,238,0.18);
+      color: var(--text);
+    }
+
+    .tech-item i { font-size: 1rem; }
+
+    /* CTA banner */
+    .cta-banner {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 2.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp 0.8s 0.5s ease both;
+    }
+
+    .cta-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(34,211,238,0.05), transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-banner h3 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.75rem;
+      color: var(--text);
+    }
+
+    .cta-banner p {
+      font-size: 0.9rem;
+      color: var(--subtle);
+      margin-bottom: 1.75rem;
+    }
+
+    .cta-banner-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 2rem;
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      color: var(--bg);
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: 99px;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .cta-banner-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(34,211,238,0.25);
+    }
+
+    /* ─── Footer ─── */
+    .footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .footer-copy {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .footer-copy a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-copy a:hover { color: var(--cyan); }
+
+    .footer-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+    }
+
+    .status-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 2s infinite;
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        position: fixed;
+        top: 64px; left: 0; right: 0;
+        flex-direction: column;
+        background: rgba(6,8,16,0.98);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--border2);
+        padding: 1rem 2rem;
+        z-index: 998;
+      }
+      .nav-links.open { display: flex; }
+      .nl { padding: 0.75rem; border-bottom: 1px solid var(--border); }
+      .nl:last-child { border-bottom: none; }
+      .hamburger { display: flex; }
+      .cta-btn { display: none; }
+      .stats-strip { grid-template-columns: 1fr; }
+      .story-card, .builder-card, .tech-card { padding: 1.75rem; }
+      .about-hero { padding: 120px 1.25rem 60px; }
+      .about-body { padding: 0 1.25rem 80px; }
+    }
+
+    @media (max-width: 480px) {
+      .builder-hdr { flex-direction: column; text-align: center; }
+      .builder-links { justify-content: center; }
+      .tech-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
 </head>
 <body>
 
-<header>
-    <h1>About Us</h1>
-    <p>Learn more about our journey, our vision, and what we stand for</p>
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <div class="brand-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+        </svg>
+      </div>
+      <span class="brand-name">ShareYou</span>
+    </a>
+
+    <nav class="nav-links" id="nav-links">
+      <a href="index.html" class="nl">Home</a>
+      <a href="index.html#features" class="nl">Features</a>
+      <a href="index.html#workspace" class="nl">Workspace</a>
+      <a href="index.html#code-editor" class="nl">Code Share</a>
+      <a href="index.html#dashboard" class="nl">Dashboard</a>
+      <a href="about.html" class="nl active">About</a>
+    </nav>
+
+    <div class="nav-right">
+      <a href="index.html#workspace" class="cta-btn">
+        <span>Start Sharing</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
 </header>
 
-<div class="about-container">
-    <div class="about-section">
-    <h2>Our Journey</h2>
-    <p>Hey, its your Sushant Sharma. I am B.Tech Final Year student at National Institute of Technology, Bhopal persuing Computer Science Engineering. This site is developed under a project assigned to us by our Professor.</p>
-
-    <p>So, I decide to compose our skills and expertise we gain from college into this site. It's a basic file sharing project but we have given our best to make it stand unique out of all existing sites which does the same as we do. We value creativity, collaboration, and open communication within our team, and we believe that these values are what set us apart in the industry.</p>
-
-    <div class="quote">
-        <p>"The best way to predict the future is to create it." - Peter Drucker</p>
+<!-- HERO -->
+<section class="about-hero">
+  <div class="about-orb about-orb-1"></div>
+  <div class="about-orb about-orb-2"></div>
+  <div class="about-grid-overlay"></div>
+  <div class="about-hero-inner">
+    <div class="about-tag">
+      <span class="about-tag-dot"></span>
+      The story behind ShareYou
     </div>
+    <h1 class="about-title">
+      Built by a student,<br />
+      <span class="grad-purple">for everyone.</span>
+    </h1>
+    <p class="about-lead">
+      A final-year NIT project turned into something we're genuinely proud of.
+      Here's the honest story behind ShareYou.
+    </p>
+  </div>
+</section>
+
+<!-- BODY -->
+<div class="about-body">
+
+  <!-- Story -->
+  <div class="story-card">
+    <div class="story-section-tag">Our Journey</div>
+    <h2>How ShareYou came to life</h2>
+    <p>
+      Hey, I'm Sushant Sharma — a B.Tech final-year student at the National Institute of Technology, Bhopal, studying Computer Science Engineering. ShareYou started as a project assigned by our professor, and like most great things, it grew beyond its original scope.
+    </p>
+    <p>
+      Instead of building yet another plain file-uploader, I decided to channel everything I'd learned — backend architecture, clean UI design, real-time systems — into something that actually felt worth using. The goal was simple: make file sharing feel as smooth and modern as the tools we use every day, like Notion, Linear, or Figma.
+    </p>
+    <p>
+      What you're seeing now is the result of that vision: a platform built with care, curiosity, and a genuine belief that student projects don't have to look like student projects.
+    </p>
+    <div class="quote-block">
+      <p>"The best way to predict the future is to create it."</p>
+      <cite>— Peter Drucker</cite>
     </div>
+  </div>
+
+  <!-- Builder profile -->
+  <div class="builder-card">
+    <div class="builder-hdr">
+      <div class="builder-avatar">SS</div>
+      <div class="builder-info">
+        <h3>Sushant Sharma</h3>
+        <p>NIT Bhopal · Computer Science Engineering</p>
+        <div class="builder-badge">
+          <i class="fa-solid fa-circle" style="font-size:6px"></i>
+          Final Year · Batch 2025
+        </div>
+      </div>
+    </div>
+    <p class="builder-bio">
+      Full-stack developer with a passion for clean UI, scalable backends, and collaboration tooling. I built ShareYou to demonstrate what's possible when you combine modern frontend aesthetics with a well-structured FastAPI backend — and to prove that academic projects can ship production-quality work.
+    </p>
+    <div class="builder-links">
+      <a href="https://www.linkedin.com/in/sushantsharma14" class="builder-link" target="_blank">
+        <i class="fab fa-linkedin-in"></i> LinkedIn
+      </a>
+      <a href="https://github.com/CodeBySushant" class="builder-link" target="_blank">
+        <i class="fab fa-github"></i> GitHub
+      </a>
+      <a href="https://instagram.com/lifeofsushant" class="builder-link" target="_blank">
+        <i class="fab fa-instagram"></i> Instagram
+      </a>
+      <a href="https://www.youtube.com/c/codewithsushant" class="builder-link" target="_blank">
+        <i class="fab fa-youtube"></i> YouTube
+      </a>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-strip">
+    <div class="stat-pill">
+      <div class="stat-icon" style="color:#22d3ee"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+      <div class="stat-num">100MB</div>
+      <div class="stat-label">Max file size</div>
+    </div>
+    <div class="stat-pill">
+      <div class="stat-icon" style="color:#a78bfa"><i class="fa-solid fa-bolt"></i></div>
+      <div class="stat-num">Instant</div>
+      <div class="stat-label">QR generation</div>
+    </div>
+    <div class="stat-pill">
+      <div class="stat-icon" style="color:#34d399"><i class="fa-solid fa-shield-halved"></i></div>
+      <div class="stat-num">0</div>
+      <div class="stat-label">Accounts needed</div>
+    </div>
+  </div>
+
+  <!-- Tech stack -->
+  <div class="tech-card">
+    <h3>Technology stack</h3>
+    <div class="tech-grid">
+      <div class="tech-item"><i class="fa-brands fa-python" style="color:#22d3ee"></i> FastAPI</div>
+      <div class="tech-item"><i class="fa-solid fa-database" style="color:#a78bfa"></i> SQLite</div>
+      <div class="tech-item"><i class="fa-brands fa-html5" style="color:#fb923c"></i> HTML5</div>
+      <div class="tech-item"><i class="fa-brands fa-css3-alt" style="color:#60a5fa"></i> CSS3</div>
+      <div class="tech-item"><i class="fa-brands fa-js" style="color:#fbbf24"></i> Vanilla JS</div>
+      <div class="tech-item"><i class="fa-solid fa-qrcode" style="color:#34d399"></i> QRCode.js</div>
+      <div class="tech-item"><i class="fa-solid fa-server" style="color:#f472b6"></i> Uvicorn</div>
+      <div class="tech-item"><i class="fa-solid fa-table" style="color:#94a3b8"></i> SQLAlchemy</div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-banner">
+    <h3>Ready to share something?</h3>
+    <p>Drop a file, get a link, scan a QR — in under 10 seconds.</p>
+    <a href="index.html#workspace" class="cta-banner-btn">
+      <i class="fa-solid fa-arrow-up-from-bracket"></i>
+      Start Sharing Now
+    </a>
+  </div>
+
 </div>
 
-<footer>
-    <p>&copy; 2025 NitianCreations. All rights reserved.</p>
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-copy">
+    <span>© 2025 ShareYou. Developed by Sushant Sharma.</span>
+    <a href="index.html">Home</a>
+    <a href="index.html#features">Features</a>
+    <a href="index.html#workspace">Workspace</a>
+    <span class="footer-status">
+      <span class="status-dot"></span> All systems operational
+    </span>
+  </div>
 </footer>
 
+<script>
+  function toggleMenu() {
+    document.getElementById('nav-links').classList.toggle('open');
+    document.getElementById('hamburger').classList.toggle('open');
+  }
+</script>
 </body>
 </html>

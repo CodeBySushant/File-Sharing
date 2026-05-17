@@ -32,7 +32,7 @@
       <a href="#workspace" class="nl">Workspace</a>
       <a href="#code-editor" class="nl">Code Share</a>
       <a href="#dashboard" class="nl">Dashboard</a>
-      <a href="#footer" class="nl">About</a>
+      <a href="about.html" class="nl">About</a>
     </nav>
 
     <div class="nav-right">
@@ -80,7 +80,6 @@
       </a>
     </div>
 
-    <!-- floating hero cards -->
     <div class="hero-cards">
       <div class="hcard hcard-1">
         <div class="hcard-icon"><i class="fa-solid fa-file-arrow-up"></i></div>
@@ -91,7 +90,7 @@
         <div class="hcard-status success">Done</div>
       </div>
       <div class="hcard hcard-2">
-        <div class="hcard-icon pulse-icon"><i class="fa-solid fa-users"></i></div>
+        <div class="hcard-icon"><i class="fa-solid fa-users"></i></div>
         <div>
           <div class="hcard-label">Live room</div>
           <div class="hcard-val">4 collaborators</div>
@@ -108,11 +107,8 @@
     </div>
   </div>
 
-  <!-- scroll indicator -->
   <div class="scroll-hint">
-    <div class="scroll-pill">
-      <div class="scroll-dot"></div>
-    </div>
+    <div class="scroll-pill"><div class="scroll-dot"></div></div>
   </div>
 </section>
 
@@ -123,52 +119,39 @@
     <h2 class="section-title">Everything you need to share</h2>
     <p class="section-sub">A complete collaboration suite in one elegant workspace.</p>
   </div>
-
   <div class="feat-grid">
     <div class="feat-card">
-      <div class="feat-icon-wrap" style="--glow:#22d3ee">
-        <i class="fa-solid fa-cloud-arrow-up"></i>
-      </div>
-      <h3>Drag & Drop Files</h3>
+      <div class="feat-icon-wrap" style="--glow:#22d3ee"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+      <h3>Drag &amp; Drop Files</h3>
       <p>Drop any file type. Instant upload, instant link, instant share.</p>
       <div class="feat-tag">Files</div>
     </div>
     <div class="feat-card">
-      <div class="feat-icon-wrap" style="--glow:#a78bfa">
-        <i class="fa-solid fa-code"></i>
-      </div>
+      <div class="feat-icon-wrap" style="--glow:#a78bfa"><i class="fa-solid fa-code"></i></div>
       <h3>Live Code Sharing</h3>
       <p>Collaborate on code in realtime with syntax highlighting and live cursors.</p>
       <div class="feat-tag">Code</div>
     </div>
     <div class="feat-card">
-      <div class="feat-icon-wrap" style="--glow:#34d399">
-        <i class="fa-solid fa-pen-to-square"></i>
-      </div>
+      <div class="feat-icon-wrap" style="--glow:#34d399"><i class="fa-solid fa-pen-to-square"></i></div>
       <h3>Text Collaboration</h3>
       <p>Shared live documents that update as you type — no refresh needed.</p>
       <div class="feat-tag">Text</div>
     </div>
     <div class="feat-card">
-      <div class="feat-icon-wrap" style="--glow:#fb923c">
-        <i class="fa-solid fa-qrcode"></i>
-      </div>
+      <div class="feat-icon-wrap" style="--glow:#fb923c"><i class="fa-solid fa-qrcode"></i></div>
       <h3>QR Code Transfer</h3>
       <p>Generate a QR instantly. Point, scan, receive. Cross-device in seconds.</p>
       <div class="feat-tag">QR</div>
     </div>
     <div class="feat-card">
-      <div class="feat-icon-wrap" style="--glow:#f472b6">
-        <i class="fa-solid fa-rotate"></i>
-      </div>
+      <div class="feat-icon-wrap" style="--glow:#f472b6"><i class="fa-solid fa-rotate"></i></div>
       <h3>Live Sync</h3>
       <p>Changes propagate in real time across all connected devices and sessions.</p>
       <div class="feat-tag">Sync</div>
     </div>
     <div class="feat-card">
-      <div class="feat-icon-wrap" style="--glow:#60a5fa">
-        <i class="fa-solid fa-shield-halved"></i>
-      </div>
+      <div class="feat-icon-wrap" style="--glow:#60a5fa"><i class="fa-solid fa-shield-halved"></i></div>
       <h3>Secure Rooms</h3>
       <p>Encrypted collaborative rooms with access controls and expiry links.</p>
       <div class="feat-tag">Security</div>
@@ -176,7 +159,7 @@
   </div>
 </section>
 
-<!-- ═══════════════ WORKSPACE / UPLOAD ═══════════════ -->
+<!-- ═══════════════ WORKSPACE ═══════════════ -->
 <section class="workspace" id="workspace">
   <div class="section-header">
     <div class="section-tag">Workspace</div>
@@ -185,8 +168,9 @@
   </div>
 
   <div class="workspace-panel">
-    <!-- Upload zone -->
     <div class="upload-zone" id="upload-zone">
+
+      <!-- Empty state -->
       <div class="upload-empty" id="upload-empty">
         <div class="upload-icon-wrap">
           <svg class="upload-cloud" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -203,7 +187,7 @@
         <input type="file" id="file-input" multiple class="file-input-hidden" />
       </div>
 
-      <!-- uploading state -->
+      <!-- Progress state -->
       <div class="upload-progress" id="upload-progress" style="display:none">
         <div class="progress-filename" id="progress-filename">uploading...</div>
         <div class="progress-bar-wrap">
@@ -212,11 +196,10 @@
         <div class="progress-pct" id="progress-pct">0%</div>
       </div>
 
-      <!-- success state -->
+      <!-- Success state -->
       <div class="upload-success" id="upload-success" style="display:none">
         <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
         <div class="success-filename" id="success-filename"></div>
-
         <div class="share-link-box">
           <div class="share-link-label">Shareable Link</div>
           <div class="share-link-row">
@@ -226,19 +209,17 @@
             </button>
           </div>
         </div>
-
         <div class="qr-section">
           <div class="qr-label">Scan with any device</div>
           <div class="qr-box" id="qr-box"></div>
         </div>
-
         <button class="reset-btn" onclick="resetUpload()">
           <i class="fa-solid fa-arrow-rotate-left"></i> Share another file
         </button>
       </div>
     </div>
 
-    <!-- side panel -->
+    <!-- Sidebar -->
     <div class="workspace-sidebar">
       <div class="sidebar-card">
         <div class="sc-header">
@@ -272,29 +253,16 @@
           </div>
         </div>
       </div>
-
       <div class="sidebar-card">
         <div class="sc-header">
           <i class="fa-solid fa-bolt"></i>
           Quick Actions
         </div>
         <div class="qa-grid">
-          <button class="qa-btn">
-            <i class="fa-solid fa-code"></i>
-            Code Share
-          </button>
-          <button class="qa-btn">
-            <i class="fa-solid fa-pen"></i>
-            Text Share
-          </button>
-          <button class="qa-btn">
-            <i class="fa-solid fa-users"></i>
-            New Room
-          </button>
-          <button class="qa-btn">
-            <i class="fa-solid fa-qrcode"></i>
-            QR Scan
-          </button>
+          <button class="qa-btn"><i class="fa-solid fa-code"></i> Code Share</button>
+          <button class="qa-btn"><i class="fa-solid fa-pen"></i> Text Share</button>
+          <button class="qa-btn"><i class="fa-solid fa-users"></i> New Room</button>
+          <button class="qa-btn"><i class="fa-solid fa-qrcode"></i> QR Scan</button>
         </div>
       </div>
     </div>
@@ -308,7 +276,6 @@
     <h2 class="section-title">Live collaborative editor</h2>
     <p class="section-sub">Write code together in realtime — like pair programming, anywhere.</p>
   </div>
-
   <div class="editor-mockup">
     <div class="editor-chrome">
       <div class="editor-dots">
@@ -322,9 +289,9 @@
         <div class="etab">README.md</div>
       </div>
       <div class="editor-users">
-        <div class="eu-avatar" style="background:#22d3ee" title="Sushant">S</div>
-        <div class="eu-avatar" style="background:#a78bfa" title="Alex">A</div>
-        <div class="eu-avatar" style="background:#34d399" title="Maya">M</div>
+        <div class="eu-avatar" style="background:#22d3ee">S</div>
+        <div class="eu-avatar" style="background:#a78bfa">A</div>
+        <div class="eu-avatar" style="background:#34d399">M</div>
         <div class="eu-live"><span class="live-blink"></span> 3 live</div>
       </div>
     </div>
@@ -342,13 +309,13 @@
         <div class="code-line"></div>
         <div class="code-line"><span class="kw">@sync</span>.on_join</div>
         <div class="code-line"><span class="kw">def</span> <span class="fn">on_user_join</span>(user):</div>
-        <div class="code-line">    <span class="fn">room</span>.broadcast(<span class="str">f"<span class="str">{user.name}</span> joined"</span>)</div>
+        <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">room</span>.broadcast(<span class="str">f"{user.name} joined"</span>)</div>
         <div class="code-line"></div>
         <div class="code-line"><span class="kw">@sync</span>.on_share</div>
         <div class="code-line"><span class="kw">def</span> <span class="fn">handle_file</span>(file):</div>
-        <div class="code-line">    link = <span class="fn">room</span>.generate_link(file)</div>
-        <div class="code-line">    <span class="kw">return</span> {<span class="str">"url"</span>: link, <span class="str">"qr"</span>: <span class="kw">True</span>}</div>
-        <div class="code-line code-cursor-line">    <span class="editor-cursor">|</span></div>
+        <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;link = <span class="fn">room</span>.generate_link(file)</div>
+        <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> {<span class="str">"url"</span>: link, <span class="str">"qr"</span>: <span class="kw">True</span>}</div>
+        <div class="code-line code-cursor-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="editor-cursor">|</span></div>
       </div>
     </div>
     <div class="editor-statusbar">
@@ -371,7 +338,6 @@
     <h2 class="section-title">Your activity at a glance</h2>
     <p class="section-sub">Monitor shares, rooms, and collaboration in realtime.</p>
   </div>
-
   <div class="dash-grid">
     <div class="dash-stat">
       <div class="ds-icon" style="--c:#22d3ee"><i class="fa-solid fa-file-arrow-up"></i></div>
@@ -398,7 +364,6 @@
       <div class="ds-trend">Across 4 regions</div>
     </div>
   </div>
-
   <div class="rooms-panel">
     <div class="rp-header">
       <span>Active Rooms</span>
@@ -407,10 +372,7 @@
     <div class="rooms-list">
       <div class="room-row">
         <div class="rr-dot live"></div>
-        <div class="rr-info">
-          <div class="rr-name">Design Sprint #4</div>
-          <div class="rr-meta">Files · Code · Text</div>
-        </div>
+        <div class="rr-info"><div class="rr-name">Design Sprint #4</div><div class="rr-meta">Files · Code · Text</div></div>
         <div class="rr-avatars">
           <div class="rra" style="background:#22d3ee">S</div>
           <div class="rra" style="background:#a78bfa">A</div>
@@ -420,10 +382,7 @@
       </div>
       <div class="room-row">
         <div class="rr-dot live"></div>
-        <div class="rr-info">
-          <div class="rr-name">Backend API Review</div>
-          <div class="rr-meta">Code · Text</div>
-        </div>
+        <div class="rr-info"><div class="rr-name">Backend API Review</div><div class="rr-meta">Code · Text</div></div>
         <div class="rr-avatars">
           <div class="rra" style="background:#34d399">K</div>
           <div class="rra" style="background:#fb923c">R</div>
@@ -432,13 +391,8 @@
       </div>
       <div class="room-row idle">
         <div class="rr-dot"></div>
-        <div class="rr-info">
-          <div class="rr-name">Marketing Assets</div>
-          <div class="rr-meta">Files</div>
-        </div>
-        <div class="rr-avatars">
-          <div class="rra" style="background:#60a5fa">J</div>
-        </div>
+        <div class="rr-info"><div class="rr-name">Marketing Assets</div><div class="rr-meta">Files</div></div>
+        <div class="rr-avatars"><div class="rra" style="background:#60a5fa">J</div></div>
         <div class="rr-action">Open →</div>
       </div>
     </div>
@@ -466,7 +420,6 @@
         <a href="https://www.youtube.com/c/codewithsushant" class="fsoc" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
       </div>
     </div>
-
     <div class="footer-links">
       <div class="fl-col">
         <div class="fl-heading">Product</div>
@@ -477,7 +430,7 @@
       </div>
       <div class="fl-col">
         <div class="fl-heading">Company</div>
-        <a href="#">About</a>
+        <a href="about.html">About</a>
         <a href="#">Blog</a>
         <a href="#">Careers</a>
         <a href="#">Contact</a>
@@ -491,7 +444,6 @@
       </div>
     </div>
   </div>
-
   <div class="footer-bottom">
     <div class="footer-sep"></div>
     <div class="footer-copy">
@@ -501,9 +453,7 @@
   </div>
 </footer>
 
-<!-- Toast -->
 <div class="toast" id="toast"></div>
-
 <script src="main.js"></script>
 </body>
 </html>
