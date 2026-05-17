@@ -1,22 +1,31 @@
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String, DateTime, Text
 from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
 
 Base = declarative_base()
 
+
 class File(Base):
-    __tablename__ = 'files'
+    __tablename__ = "files"
 
     id = Column(Integer, primary_key=True, index=True)
-
     file_id = Column(String, unique=True, index=True)
-
     file_name = Column(String)
-
     file_path = Column(String)
-
     file_size = Column(Integer)
-
     file_type = Column(String)
-
     uploaded_at = Column(DateTime, default=datetime.utcnow)
+
+
+class CodeRoom(Base):
+    __tablename__ = "code_rooms"
+
+    id = Column(Integer, primary_key=True, index=True)
+    room_id = Column(String, unique=True, index=True)
+    content = Column(Text, default="")
+    language = Column(String, default="plaintext")
+    title = Column(String, default="Untitled")
+    password_hash = Column(String, nullable=True)   # None = no password
+    expires_at = Column(DateTime, nullable=True)     # None = never expires
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

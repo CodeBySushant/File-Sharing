@@ -28,7 +28,8 @@ function showToast(msg, duration = 3000) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), duration);
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), duration);
 }
 
 // ─── Copy link ───
@@ -78,8 +79,8 @@ function uploadFile(file) {
   xhr.upload.onprogress = function (e) {
     if (e.lengthComputable) {
       const percent = Math.round((e.loaded / e.total) * 100);
-      bar.style.width  = percent + '%';
-      pct.textContent  = percent + '%';
+      bar.style.width = percent + '%';
+      pct.textContent = percent + '%';
     }
   };
 
@@ -113,8 +114,8 @@ function showSuccess(filename, fileId) {
 
   const shareURL = `${window.location.protocol}//${window.location.host}/file/${fileId}`;
 
-  fnEl.textContent    = filename;
-  linkInput.value     = shareURL;
+  fnEl.textContent      = filename;
+  linkInput.value       = shareURL;
   success.style.display = 'flex';
 
   qrBox.innerHTML = '';
@@ -172,17 +173,26 @@ async function loadRecentFiles() {
     const recentList = document.getElementById('recent-list');
     recentList.innerHTML = '';
 
+    if (files.length === 0) {
+      recentList.innerHTML = '<div style="padding:0.75rem;font-size:0.8rem;color:var(--muted);text-align:center;">No files shared yet</div>';
+      return;
+    }
+
     files.forEach(file => {
       const sizeMB = (file.file_size / (1024 * 1024)).toFixed(2);
       const ext    = file.file_name.split('.').pop().toLowerCase();
 
-      // Pick icon class based on extension
       let iconClass = 'file-code';
       let iconTag   = 'fa-file-code';
-      if (['pdf'].includes(ext))                         { iconClass = 'file-pdf';  iconTag = 'fa-file-pdf'; }
+      if (['pdf'].includes(ext))                                      { iconClass = 'file-pdf';  iconTag = 'fa-file-pdf'; }
       else if (['jpg','jpeg','png','gif','webp','svg'].includes(ext)) { iconClass = 'file-img';  iconTag = 'fa-image'; }
-      else if (['mp4','mov','avi','mkv'].includes(ext))  { iconClass = 'file-code'; iconTag = 'fa-file-video'; }
-      else if (['zip','tar','gz','rar'].includes(ext))   { iconClass = 'file-code'; iconTag = 'fa-file-zipper'; }
+      else if (['mp4','mov','avi','mkv'].includes(ext))               { iconClass = 'file-code'; iconTag = 'fa-file-video'; }
+      else if (['zip','tar','gz','rar'].includes(ext))                { iconClass = 'file-code'; iconTag = 'fa-file-zipper'; }
+
+      // Time ago
+      const uploaded = new Date(file.uploaded_at);
+      const diffMin  = Math.round((Date.now() - uploaded) / 60000);
+      let timeAgo    = diffMin < 1 ? 'Just now' : diffMin < 60 ? `${diffMin}m ago` : diffMin < 1440 ? `${Math.floor(diffMin/60)}h ago` : `${Math.floor(diffMin/1440)}d ago`;
 
       const item = document.createElement('div');
       item.className = 'recent-item';
@@ -190,13 +200,13 @@ async function loadRecentFiles() {
         <div class="ri-icon ${iconClass}"><i class="fa-solid ${iconTag}"></i></div>
         <div class="ri-info">
           <div class="ri-name">${file.file_name}</div>
-          <div class="ri-meta">${sizeMB} MB</div>
+          <div class="ri-meta">${timeAgo} · ${sizeMB} MB</div>
         </div>
         <div class="ri-status done">Shared</div>
       `;
 
-      // Make the row clickable — copies share link
       item.style.cursor = 'pointer';
+      item.title = 'Click to copy share link';
       item.addEventListener('click', () => {
         const url = `${window.location.protocol}//${window.location.host}/file/${file.file_id}`;
         navigator.clipboard.writeText(url).then(() => showToast(`✓ Link copied for ${file.file_name}`));
@@ -211,14 +221,63 @@ async function loadRecentFiles() {
 
 loadRecentFiles();
 
-// ─── Quick action buttons ───
+// ─── Load real dashboard stats ───
+async function loadStats() {
+  try {
+    const res = await fetch('/stats');
+    if (!res.ok) return;
+    const data = await res.json();
+
+    // Files shared
+    const filesEl = document.querySelector('.dash-stat:nth-child(1) .ds-val');
+    if (filesEl) filesEl.textContent = data.total_files.toLocaleString();
+
+    // Active rooms
+    const roomsEl = document.querySelector('.dash-stat:nth-child(2) .ds-val');
+    if (roomsEl) roomsEl.textContent = data.live_rooms;
+
+    // Devices connected (live viewers)
+    const devicesEl = document.querySelector('.dash-stat:nth-child(4) .ds-val');
+    if (devicesEl) devicesEl.textContent = data.live_viewers;
+
+    // Uptime
+    const uptimeEl = document.querySelector('.dash-stat:nth-child(3) .ds-val');
+    if (uptimeEl && data.uptime_days !== null) {
+      uptimeEl.textContent = data.uptime_days > 0 ? `${data.uptime_days}d` : '< 1d';
+    }
+  } catch (err) {
+    console.error('Failed to load stats:', err);
+  }
+}
+
+loadStats();
+// Refresh stats every 30 seconds
+setInterval(loadStats, 30000);
+
+// ─── Quick action buttons ─── FIX: navigate to codeshare instead of "coming soon"
 document.querySelectorAll('.qa-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    showToast(`${btn.textContent.trim()} — coming soon!`);
+    const label = btn.textContent.trim();
+    if (label.includes('Code Share') || label.includes('Text Share')) {
+      window.location.href = 'codeshare.html';
+    } else if (label.includes('New Room')) {
+      window.location.href = 'codeshare.html';
+    } else if (label.includes('QR Scan')) {
+      showToast('Point your camera at a ShareYou QR code to open it.');
+    } else {
+      showToast(`${label} — coming soon!`);
+    }
   });
 });
 
-document.querySelectorAll('.rp-new-btn, .rr-action').forEach(btn => {
+// ─── Dashboard room buttons ───
+document.querySelectorAll('.rp-new-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    window.location.href = 'codeshare.html';
+  });
+});
+
+document.querySelectorAll('.rr-action').forEach(btn => {
   btn.addEventListener('click', () => showToast('Collaborative rooms — coming soon!'));
 });
 

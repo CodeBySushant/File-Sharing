@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>ShareYou — Code Share</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <link rel="icon" type="image/png" href="favicon.ico" />
+  <style>
+    :root {
+      --bg:      #060810;
+      --surface: #0d1117;
+      --surface2:#131820;
+      --surface3:#1a2030;
+      --border:  rgba(255,255,255,0.07);
+      --border2: rgba(255,255,255,0.13);
+      --text:    #e2e8f0;
+      --muted:   #64748b;
+      --subtle:  #94a3b8;
+      --cyan:    #22d3ee;
+      --purple:  #a78bfa;
+      --green:   #34d399;
+      --orange:  #fb923c;
+      --red:     #f87171;
+      --font:    'Sora', system-ui, sans-serif;
+      --mono:    'JetBrains Mono', monospace;
+      --r:       10px;
+      --rl:      16px;
+      --rxl:     22px;
+    }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { font-family:var(--font); background:var(--bg); color:var(--text); overflow-x:hidden; min-height:100vh; display:flex; flex-direction:column; }
+    ::selection { background:rgba(34,211,238,0.2); }
+    ::-webkit-scrollbar { width:6px; height:6px; }
+    ::-webkit-scrollbar-track { background:var(--surface); }
+    ::-webkit-scrollbar-thumb { background:var(--border2); border-radius:99px; }
+
+    /* ── Navbar ── */
+    .navbar { position:fixed; top:0; left:0; right:0; z-index:999; height:56px; padding:0 1.5rem; background:rgba(6,8,16,0.85); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); display:flex; align-items:center; gap:1rem; }
+    .brand { display:flex; align-items:center; gap:0.55rem; text-decoration:none; flex-shrink:0; }
+    .brand-icon { width:28px; height:28px; border-radius:7px; background:linear-gradient(135deg,var(--cyan),var(--purple)); display:flex; align-items:center; justify-content:center; color:#fff; }
+    .brand-icon svg { width:14px; height:14px; }
+    .brand-name { font-size:1rem; font-weight:700; color:var(--text); letter-spacing:-0.02em; }
+    .nav-sep { width:1px; height:20px; background:var(--border2); }
+    .nav-page-title { font-size:0.85rem; font-weight:500; color:var(--muted); }
+    .nav-right { display:flex; align-items:center; gap:0.6rem; margin-left:auto; }
+    .nav-back { display:inline-flex; align-items:center; gap:0.4rem; padding:0.4rem 0.9rem; background:rgba(255,255,255,0.05); border:1px solid var(--border2); border-radius:99px; color:var(--subtle); font-size:0.8rem; font-weight:500; text-decoration:none; transition:color 0.2s,background 0.2s; }
+    .nav-back:hover { color:var(--text); background:rgba(255,255,255,0.09); }
+
+    /* ── Main layout ── */
+    .page { padding-top:56px; flex:1; display:flex; flex-direction:column; }
+
+    /* ══════════════ LANDING ══════════════ */
+    #landing { flex:1; display:flex; align-items:center; justify-content:center; padding:2rem; }
+    .landing-card {
+      width:100%; max-width:560px;
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:var(--rxl);
+      overflow:hidden;
+      box-shadow:0 40px 100px rgba(0,0,0,0.5);
+    }
+    .lc-top {
+      padding:2.5rem 2.5rem 2rem;
+      background:linear-gradient(135deg,rgba(34,211,238,0.06),rgba(167,139,250,0.06));
+      border-bottom:1px solid var(--border);
+      text-align:center;
+    }
+    .lc-icon { width:56px; height:56px; border-radius:14px; background:linear-gradient(135deg,var(--cyan),var(--purple)); display:flex; align-items:center; justify-content:center; font-size:1.4rem; color:#060810; margin:0 auto 1.25rem; }
+    .lc-top h1 { font-size:1.5rem; font-weight:700; letter-spacing:-0.03em; margin-bottom:0.5rem; }
+    .lc-top p { font-size:0.88rem; color:var(--subtle); }
+
+    .lc-body { padding:2rem 2.5rem 2.5rem; }
+
+    .form-group { margin-bottom:1.25rem; }
+    .form-label { display:block; font-size:0.75rem; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:var(--muted); margin-bottom:0.5rem; }
+    .form-input, .form-select {
+      width:100%; padding:0.65rem 1rem;
+      background:rgba(255,255,255,0.04);
+      border:1px solid var(--border2);
+      border-radius:var(--r);
+      color:var(--text); font-size:0.88rem;
+      font-family:var(--font);
+      outline:none;
+      transition:border-color 0.2s;
+    }
+    .form-input:focus, .form-select:focus { border-color:var(--cyan); }
+    .form-select option { background:#0d1117; }
+    .form-input::placeholder { color:var(--muted); }
+
+    .toggle-row { display:flex; align-items:center; gap:0.75rem; margin-bottom:1rem; }
+    .toggle-label { font-size:0.85rem; color:var(--subtle); flex:1; }
+    .toggle { position:relative; width:40px; height:22px; cursor:pointer; }
+    .toggle input { opacity:0; width:0; height:0; }
+    .toggle-track { position:absolute; inset:0; background:rgba(255,255,255,0.1); border-radius:99px; transition:background 0.2s; }
+    .toggle input:checked + .toggle-track { background:var(--cyan); }
+    .toggle-thumb { position:absolute; top:3px; left:3px; width:16px; height:16px; background:#fff; border-radius:50%; transition:transform 0.2s; }
+    .toggle input:checked ~ .toggle-thumb { transform:translateX(18px); }
+
+    .password-wrap { position:relative; }
+    .password-wrap .form-input { padding-right:2.5rem; }
+    .pw-toggle { position:absolute; right:0.75rem; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--muted); cursor:pointer; font-size:0.9rem; }
+
+    .expiry-options { display:grid; grid-template-columns:repeat(4,1fr); gap:0.5rem; }
+    .expiry-opt { padding:0.5rem; border:1px solid var(--border2); border-radius:var(--r); font-size:0.78rem; font-weight:500; color:var(--muted); font-family:var(--font); background:none; cursor:pointer; text-align:center; transition:all 0.2s; }
+    .expiry-opt.active, .expiry-opt:hover { border-color:var(--cyan); color:var(--cyan); background:rgba(34,211,238,0.06); }
+
+    .create-btn {
+      width:100%; padding:0.85rem;
+      background:linear-gradient(135deg,var(--cyan),var(--purple));
+      color:#060810; font-size:0.95rem; font-weight:700;
+      font-family:var(--font);
+      border:none; border-radius:99px;
+      cursor:pointer; display:flex; align-items:center; justify-content:center; gap:0.5rem;
+      transition:opacity 0.2s, transform 0.2s;
+      margin-top:1.5rem;
+    }
+    .create-btn:hover { opacity:0.9; transform:translateY(-1px); }
+    .create-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+
+    .or-divider { display:flex; align-items:center; gap:0.75rem; margin:1.5rem 0; }
+    .or-divider::before, .or-divider::after { content:''; flex:1; height:1px; background:var(--border); }
+    .or-divider span { font-size:0.75rem; color:var(--muted); white-space:nowrap; }
+
+    .join-row { display:flex; gap:0.5rem; }
+    .join-row .form-input { flex:1; }
+    .join-btn {
+      padding:0 1.1rem;
+      background:rgba(255,255,255,0.05);
+      border:1px solid var(--border2);
+      border-radius:var(--r);
+      color:var(--subtle); font-size:0.85rem; font-weight:500;
+      font-family:var(--font);
+      cursor:pointer; white-space:nowrap;
+      transition:all 0.2s;
+    }
+    .join-btn:hover { border-color:var(--cyan); color:var(--cyan); }
+
+    /* ══════════════ EDITOR VIEW ══════════════ */
+    #editor-view { flex:1; display:none; flex-direction:column; }
+
+    .toolbar {
+      height:52px; display:flex; align-items:center; gap:0.75rem;
+      padding:0 1.5rem;
+      background:var(--surface2);
+      border-bottom:1px solid var(--border);
+      flex-shrink:0;
+    }
+    .toolbar-title-input {
+      background:none; border:none; color:var(--text);
+      font-size:0.9rem; font-weight:600; font-family:var(--font);
+      outline:none; min-width:0; width:160px;
+    }
+    .toolbar-title-input::placeholder { color:var(--muted); }
+
+    .lang-select {
+      padding:0.3rem 0.7rem;
+      background:rgba(255,255,255,0.04);
+      border:1px solid var(--border2);
+      border-radius:var(--r);
+      color:var(--subtle); font-size:0.78rem;
+      font-family:var(--mono);
+      outline:none;
+    }
+    .lang-select option { background:#0d1117; }
+
+    .toolbar-sep { width:1px; height:22px; background:var(--border2); }
+
+    .tb-btn {
+      display:inline-flex; align-items:center; gap:0.4rem;
+      padding:0.35rem 0.8rem;
+      background:rgba(255,255,255,0.04);
+      border:1px solid var(--border);
+      border-radius:var(--r);
+      color:var(--subtle); font-size:0.78rem; font-weight:500;
+      font-family:var(--font); cursor:pointer;
+      transition:all 0.2s; white-space:nowrap;
+    }
+    .tb-btn:hover { border-color:var(--border2); color:var(--text); }
+
+    .share-strip {
+      display:flex; align-items:center; gap:0.75rem;
+      padding:0.65rem 1.5rem;
+      background:rgba(34,211,238,0.04);
+      border-bottom:1px solid rgba(34,211,238,0.1);
+      flex-wrap:wrap;
+    }
+    .share-link-display {
+      flex:1; min-width:200px;
+      display:flex; align-items:center; gap:0.5rem;
+      padding:0.45rem 0.85rem;
+      background:rgba(255,255,255,0.04);
+      border:1px solid var(--border2);
+      border-radius:var(--r);
+      font-family:var(--mono); font-size:0.78rem; color:var(--cyan);
+    }
+    .share-link-display i { color:var(--muted); flex-shrink:0; }
+    .share-link-text { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+    .strip-btn {
+      display:inline-flex; align-items:center; gap:0.4rem;
+      padding:0.45rem 0.9rem;
+      border-radius:99px; font-size:0.78rem; font-weight:600;
+      font-family:var(--font); cursor:pointer; white-space:nowrap;
+      transition:all 0.2s;
+    }
+    .strip-btn-copy { background:rgba(34,211,238,0.1); border:1px solid rgba(34,211,238,0.2); color:var(--cyan); }
+    .strip-btn-copy:hover { background:rgba(34,211,238,0.2); }
+    .strip-btn-qr { background:rgba(167,139,250,0.1); border:1px solid rgba(167,139,250,0.2); color:var(--purple); }
+    .strip-btn-qr:hover { background:rgba(167,139,250,0.2); }
+
+    .viewers-badge {
+      display:inline-flex; align-items:center; gap:0.4rem;
+      padding:0.35rem 0.75rem;
+      background:rgba(52,211,153,0.08);
+      border:1px solid rgba(52,211,153,0.15);
+      border-radius:99px;
+      font-size:0.75rem; font-weight:500; color:var(--green);
+    }
+    .viewers-dot { width:6px; height:6px; border-radius:50%; background:var(--green); animation:pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.4} }
+
+    .conn-badge {
+      display:inline-flex; align-items:center; gap:0.4rem;
+      padding:0.35rem 0.75rem;
+      border-radius:99px;
+      font-size:0.75rem; font-weight:500;
+    }
+    .conn-badge.connected { background:rgba(52,211,153,0.08); border:1px solid rgba(52,211,153,0.15); color:var(--green); }
+    .conn-badge.disconnected { background:rgba(248,113,113,0.08); border:1px solid rgba(248,113,113,0.15); color:var(--red); }
+    .conn-badge.connecting { background:rgba(251,146,60,0.08); border:1px solid rgba(251,146,60,0.15); color:var(--orange); }
+    .conn-dot { width:6px; height:6px; border-radius:50%; background:currentColor; animation:pulse 1.5s infinite; }
+
+    .code-workspace { flex:1; display:flex; overflow:hidden; }
+
+    .editor-pane {
+      flex:1; display:flex; flex-direction:column; overflow:hidden;
+      border-right:1px solid var(--border);
+    }
+    .editor-pane-label {
+      height:32px; display:flex; align-items:center; padding:0 1rem;
+      background:var(--surface2); border-bottom:1px solid var(--border);
+      font-size:0.72rem; font-weight:600; letter-spacing:0.05em;
+      text-transform:uppercase; color:var(--muted);
+      gap:0.5rem; flex-shrink:0;
+    }
+    .editor-pane-label .dot { width:7px; height:7px; border-radius:50%; }
+
+    #code-editor-ta {
+      flex:1; width:100%; padding:1.25rem 1.5rem;
+      background:var(--surface);
+      border:none; outline:none; resize:none;
+      font-family:var(--mono); font-size:0.88rem; line-height:1.8;
+      color:var(--text);
+      tab-size:2;
+    }
+
+    .stats-pane {
+      width:220px; flex-shrink:0;
+      display:flex; flex-direction:column;
+      background:var(--surface);
+      overflow-y:auto;
+    }
+    .stats-pane-hdr {
+      height:32px; display:flex; align-items:center; padding:0 1rem;
+      background:var(--surface2); border-bottom:1px solid var(--border);
+      font-size:0.72rem; font-weight:600; letter-spacing:0.05em;
+      text-transform:uppercase; color:var(--muted); flex-shrink:0;
+    }
+    .sp-item { padding:0.85rem 1rem; border-bottom:1px solid var(--border); }
+    .sp-label { font-size:0.72rem; color:var(--muted); margin-bottom:0.25rem; }
+    .sp-val { font-size:1rem; font-weight:600; color:var(--text); font-family:var(--mono); }
+    .sp-val.cyan { color:var(--cyan); }
+    .sp-val.green { color:var(--green); }
+
+    .statusbar {
+      height:26px; display:flex; align-items:center;
+      padding:0 1rem; gap:1rem;
+      background:var(--surface2); border-top:1px solid var(--border);
+      font-size:0.7rem; color:var(--muted); font-family:var(--mono);
+      flex-shrink:0;
+    }
+    .sb-item { display:flex; align-items:center; gap:0.3rem; }
+
+    /* ══════════════ VIEWER VIEW ══════════════ */
+    #viewer-view { flex:1; display:none; flex-direction:column; }
+
+    .viewer-header {
+      padding:0.75rem 1.5rem;
+      background:var(--surface2);
+      border-bottom:1px solid var(--border);
+      display:flex; align-items:center; gap:1rem; flex-wrap:wrap;
+    }
+    .viewer-title { font-size:1rem; font-weight:600; color:var(--text); flex:1; }
+    .viewer-lang { font-size:0.75rem; font-weight:500; color:var(--muted); font-family:var(--mono); padding:0.25rem 0.6rem; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:6px; }
+
+    .viewer-actions { display:flex; align-items:center; gap:0.6rem; }
+
+    .copy-all-btn {
+      display:inline-flex; align-items:center; gap:0.4rem;
+      padding:0.5rem 1rem;
+      background:rgba(34,211,238,0.1); border:1px solid rgba(34,211,238,0.2);
+      border-radius:99px; color:var(--cyan);
+      font-size:0.8rem; font-weight:600; font-family:var(--font);
+      cursor:pointer; transition:all 0.2s;
+    }
+    .copy-all-btn:hover { background:rgba(34,211,238,0.2); }
+
+    .report-btn {
+      display:inline-flex; align-items:center; gap:0.4rem;
+      padding:0.5rem 1rem;
+      background:rgba(255,255,255,0.04); border:1px solid var(--border2);
+      border-radius:99px; color:var(--muted);
+      font-size:0.8rem; font-weight:500; font-family:var(--font);
+      cursor:pointer; transition:all 0.2s;
+    }
+    .report-btn:hover { border-color:var(--orange); color:var(--orange); }
+
+    .viewer-code-wrap { flex:1; overflow:auto; }
+
+    #viewer-code {
+      display:block; width:100%; min-height:100%;
+      padding:1.5rem 2rem;
+      font-family:var(--mono); font-size:0.9rem; line-height:1.9;
+      color:var(--text); background:var(--surface);
+      white-space:pre; tab-size:2;
+    }
+    #viewer-code.empty { color:var(--muted); font-style:italic; }
+
+    .viewer-statusbar {
+      height:32px; display:flex; align-items:center; gap:1.25rem;
+      padding:0 1.5rem;
+      background:var(--surface2); border-top:1px solid var(--border);
+      font-size:0.72rem; color:var(--muted); font-family:var(--mono);
+      flex-shrink:0;
+    }
+
+    /* ══════════════ EXPIRED / ERROR ══════════════ */
+    #error-view {
+      flex:1; display:none; align-items:center; justify-content:center;
+      padding:2rem;
+    }
+    .error-card {
+      max-width:420px; text-align:center;
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--rxl); padding:3rem 2.5rem;
+    }
+    .error-icon { font-size:2.5rem; margin-bottom:1.25rem; }
+    .error-card h2 { font-size:1.3rem; font-weight:700; letter-spacing:-0.02em; margin-bottom:0.75rem; }
+    .error-card p { font-size:0.88rem; color:var(--subtle); margin-bottom:1.75rem; }
+    .error-btn {
+      display:inline-flex; align-items:center; gap:0.5rem;
+      padding:0.7rem 1.6rem;
+      background:linear-gradient(135deg,var(--cyan),var(--purple));
+      color:#060810; font-size:0.9rem; font-weight:600;
+      border-radius:99px; text-decoration:none; border:none; cursor:pointer;
+      font-family:var(--font);
+    }
+
+    /* ══════════════ PASSWORD GATE ══════════════ */
+    #pw-gate {
+      flex:1; display:none; align-items:center; justify-content:center; padding:2rem;
+    }
+    .pw-card {
+      max-width:400px; width:100%;
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--rxl); padding:2.5rem;
+    }
+    .pw-card h2 { font-size:1.2rem; font-weight:700; letter-spacing:-0.02em; margin-bottom:0.5rem; }
+    .pw-card p { font-size:0.85rem; color:var(--subtle); margin-bottom:1.5rem; }
+    .pw-submit {
+      width:100%; padding:0.75rem;
+      background:linear-gradient(135deg,var(--cyan),var(--purple));
+      color:#060810; font-size:0.9rem; font-weight:700;
+      border:none; border-radius:99px; cursor:pointer;
+      font-family:var(--font); margin-top:1rem;
+      transition:opacity 0.2s;
+    }
+    .pw-submit:hover { opacity:0.9; }
+    .pw-error { font-size:0.8rem; color:var(--red); margin-top:0.5rem; display:none; }
+
+    /* ══════════════ QR MODAL ══════════════ */
+    #qr-modal {
+      display:none; position:fixed; inset:0; z-index:2000;
+      background:rgba(0,0,0,0.7); backdrop-filter:blur(8px);
+      align-items:center; justify-content:center;
+    }
+    #qr-modal.open { display:flex; }
+    .qr-modal-card {
+      background:var(--surface); border:1px solid var(--border2);
+      border-radius:var(--rxl); padding:2rem; text-align:center;
+      box-shadow:0 40px 100px rgba(0,0,0,0.6);
+    }
+    .qr-modal-card h3 { font-size:1rem; font-weight:600; margin-bottom:0.5rem; }
+    .qr-modal-card p { font-size:0.8rem; color:var(--muted); margin-bottom:1.25rem; }
+    .qr-wrap { padding:12px; background:#fff; border-radius:12px; display:inline-block; margin-bottom:1.25rem; }
+    .qr-close { padding:0.6rem 1.4rem; background:rgba(255,255,255,0.06); border:1px solid var(--border2); border-radius:99px; color:var(--subtle); font-size:0.85rem; font-family:var(--font); cursor:pointer; }
+
+    /* ══════════════ TOAST ══════════════ */
+    .toast { position:fixed; bottom:1.5rem; right:1.5rem; z-index:9999; padding:0.7rem 1.2rem; background:var(--surface2); border:1px solid var(--border2); border-radius:var(--rl); font-size:0.85rem; color:var(--text); box-shadow:0 8px 32px rgba(0,0,0,0.4); opacity:0; transform:translateY(8px); transition:opacity 0.25s,transform 0.25s; pointer-events:none; }
+    .toast.show { opacity:1; transform:translateY(0); }
+
+    /* Responsive */
+    @media(max-width:768px) {
+      .stats-pane { display:none; }
+      .share-strip { padding:0.65rem 1rem; }
+      .toolbar { padding:0 1rem; gap:0.5rem; }
+    }
+    @media(max-width:480px) {
+      .expiry-options { grid-template-columns:repeat(2,1fr); }
+      .landing-card { border-radius:var(--rl); }
+      .lc-body { padding:1.5rem; }
+      .lc-top { padding:1.75rem 1.5rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <a href="index.html" class="brand">
+    <div class="brand-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+      </svg>
+    </div>
+    <span class="brand-name">ShareYou</span>
+  </a>
+  <div class="nav-sep"></div>
+  <span class="nav-page-title">Code &amp; Text Share</span>
+  <div class="nav-right">
+    <a href="index.html" class="nav-back"><i class="fa-solid fa-arrow-left"></i> Back</a>
+  </div>
+</header>
+
+<div class="page">
+
+  <!-- ══ LANDING ══ -->
+  <div id="landing">
+    <div class="landing-card">
+      <div class="lc-top">
+        <div class="lc-icon"><i class="fa-solid fa-code"></i></div>
+        <h1>Share Code &amp; Text Live</h1>
+        <p>Create a room, get a link, share in realtime with anyone.</p>
+      </div>
+      <div class="lc-body">
+
+        <div class="form-group">
+          <label class="form-label">Title / Description</label>
+          <input type="text" class="form-input" id="room-title" placeholder="e.g. My Python snippet" maxlength="80" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Language / Type</label>
+          <select class="form-select" id="room-lang">
+            <option value="plaintext">Plain Text</option>
+            <option value="python">Python</option>
+            <option value="javascript">JavaScript</option>
+            <option value="typescript">TypeScript</option>
+            <option value="html">HTML</option>
+            <option value="css">CSS</option>
+            <option value="json">JSON</option>
+            <option value="bash">Bash / Shell</option>
+            <option value="sql">SQL</option>
+            <option value="markdown">Markdown</option>
+            <option value="yaml">YAML</option>
+            <option value="cpp">C / C++</option>
+            <option value="java">Java</option>
+            <option value="rust">Rust</option>
+            <option value="go">Go</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div class="toggle-row">
+          <span class="toggle-label"><i class="fa-solid fa-lock" style="color:var(--muted);font-size:0.8rem;margin-right:6px"></i>Password protect</span>
+          <label class="toggle">
+            <input type="checkbox" id="pw-toggle" />
+            <span class="toggle-track"></span>
+            <span class="toggle-thumb"></span>
+          </label>
+        </div>
+        <div class="form-group" id="pw-field" style="display:none">
+          <label class="form-label">Password</label>
+          <div class="password-wrap">
+            <input type="password" class="form-input" id="room-password" placeholder="Enter a password" />
+            <button class="pw-toggle" onclick="togglePwVis()" type="button" tabindex="-1">
+              <i class="fa-regular fa-eye" id="pw-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Link Expiry</label>
+          <div class="expiry-options">
+            <button class="expiry-opt active" data-hours="">Never</button>
+            <button class="expiry-opt" data-hours="1">1 hour</button>
+            <button class="expiry-opt" data-hours="24">24 hours</button>
+            <button class="expiry-opt" data-hours="168">7 days</button>
+          </div>
+        </div>
+
+        <button class="create-btn" id="create-btn" onclick="createRoom()">
+          <i class="fa-solid fa-circle-plus"></i> Create New Share
+        </button>
+
+        <div class="or-divider"><span>or join existing</span></div>
+
+        <div class="join-row">
+          <input type="text" class="form-input" id="join-room-id" placeholder="Paste room ID or full link…" />
+          <button class="join-btn" onclick="joinRoom()">Open →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ EDITOR VIEW ══ -->
+  <div id="editor-view">
+
+    <div class="toolbar">
+      <input class="toolbar-title-input" id="editor-title" placeholder="Untitled…" oninput="onTitleChange()" />
+      <div class="toolbar-sep"></div>
+      <select class="lang-select" id="editor-lang" onchange="onLangChange()">
+        <option value="plaintext">Plain Text</option>
+        <option value="python">Python</option>
+        <option value="javascript">JavaScript</option>
+        <option value="typescript">TypeScript</option>
+        <option value="html">HTML</option>
+        <option value="css">CSS</option>
+        <option value="json">JSON</option>
+        <option value="bash">Bash</option>
+        <option value="sql">SQL</option>
+        <option value="markdown">Markdown</option>
+        <option value="yaml">YAML</option>
+        <option value="cpp">C/C++</option>
+        <option value="java">Java</option>
+        <option value="rust">Rust</option>
+        <option value="go">Go</option>
+        <option value="other">Other</option>
+      </select>
+      <div class="toolbar-sep"></div>
+      <button class="tb-btn" onclick="clearEditor()"><i class="fa-regular fa-trash-can"></i> Clear</button>
+      <button class="tb-btn" onclick="copyEditorContent()"><i class="fa-regular fa-copy"></i> Copy</button>
+      <div style="margin-left:auto"></div>
+      <div class="conn-badge connecting" id="editor-conn-badge">
+        <span class="conn-dot"></span> Connecting…
+      </div>
+    </div>
+
+    <div class="share-strip">
+      <div class="share-link-display">
+        <i class="fa-solid fa-link"></i>
+        <span class="share-link-text" id="share-link-text">—</span>
+      </div>
+      <button class="strip-btn strip-btn-copy" onclick="copyShareLink()">
+        <i class="fa-regular fa-copy"></i> Copy Link
+      </button>
+      <button class="strip-btn strip-btn-qr" onclick="openQR()">
+        <i class="fa-solid fa-qrcode"></i> QR
+      </button>
+      <div class="viewers-badge" id="viewers-badge">
+        <span class="viewers-dot"></span>
+        <span id="viewer-count">0</span> viewing
+      </div>
+    </div>
+
+    <div class="code-workspace">
+      <div class="editor-pane">
+        <div class="editor-pane-label">
+          <span class="dot" style="background:#28c840"></span>
+          Editor — your changes broadcast live
+        </div>
+        <textarea
+          id="code-editor-ta"
+          spellcheck="false"
+          autocorrect="off"
+          autocapitalize="off"
+          placeholder="Start typing… viewers will see changes in realtime."
+          oninput="onEditorInput()"
+          onkeydown="handleTab(event)"
+        ></textarea>
+      </div>
+
+      <div class="stats-pane">
+        <div class="stats-pane-hdr">Room info</div>
+        <div class="sp-item">
+          <div class="sp-label">Room ID</div>
+          <div class="sp-val cyan" id="sp-room-id">—</div>
+        </div>
+        <div class="sp-item">
+          <div class="sp-label">Characters</div>
+          <div class="sp-val" id="sp-chars">0</div>
+        </div>
+        <div class="sp-item">
+          <div class="sp-label">Lines</div>
+          <div class="sp-val" id="sp-lines">0</div>
+        </div>
+        <div class="sp-item">
+          <div class="sp-label">Language</div>
+          <div class="sp-val cyan" id="sp-lang">—</div>
+        </div>
+        <div class="sp-item">
+          <div class="sp-label">Viewers</div>
+          <div class="sp-val green" id="sp-viewers">0</div>
+        </div>
+        <div class="sp-item">
+          <div class="sp-label">Expires</div>
+          <div class="sp-val" id="sp-expires" style="font-size:0.78rem">Never</div>
+        </div>
+        <div class="sp-item">
+          <div class="sp-label">Last synced</div>
+          <div class="sp-val" id="sp-sync" style="font-size:0.78rem">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="statusbar">
+      <span class="sb-item" id="sb-conn"><i class="fa-solid fa-circle" style="font-size:7px;color:var(--orange)"></i> Connecting</span>
+      <span class="sb-item" id="sb-chars">0 chars</span>
+      <span class="sb-item" id="sb-lines">1 line</span>
+      <span class="sb-item" id="sb-lang-bar">—</span>
+      <span class="sb-item" style="margin-left:auto" id="sb-sync">Not synced yet</span>
+    </div>
+  </div>
+
+  <!-- ══ VIEWER VIEW ══ -->
+  <div id="viewer-view">
+    <div class="viewer-header">
+      <div>
+        <div class="viewer-title" id="viewer-title">Loading…</div>
+      </div>
+      <span class="viewer-lang" id="viewer-lang-badge">—</span>
+      <div class="viewer-actions">
+        <div class="conn-badge connecting" id="viewer-conn-badge">
+          <span class="conn-dot"></span> Connecting…
+        </div>
+        <button class="copy-all-btn" onclick="copyViewerContent()">
+          <i class="fa-regular fa-copy"></i> Copy Text
+        </button>
+        <button class="report-btn" onclick="reportShare()">
+          <i class="fa-regular fa-flag"></i> Report
+        </button>
+      </div>
+    </div>
+
+    <div class="viewer-code-wrap">
+      <code id="viewer-code" class="empty">Waiting for content from the editor…</code>
+    </div>
+
+    <div class="viewer-statusbar">
+      <span id="vsb-conn">Connecting…</span>
+      <span id="vsb-chars">0 chars</span>
+      <span id="vsb-updated">Never updated</span>
+      <span style="margin-left:auto" id="vsb-room">Room: —</span>
+    </div>
+  </div>
+
+  <!-- ══ PASSWORD GATE ══ -->
+  <div id="pw-gate">
+    <div class="pw-card">
+      <h2><i class="fa-solid fa-lock" style="color:var(--cyan);margin-right:8px"></i>Password Required</h2>
+      <p>This code room is password protected. Enter the password to view its contents.</p>
+      <label class="form-label">Password</label>
+      <div class="password-wrap">
+        <input type="password" class="form-input" id="gate-pw-input" placeholder="Enter password…" onkeydown="if(event.key==='Enter')submitGatePw()" />
+        <button class="pw-toggle" onclick="toggleGatePwVis()" type="button" tabindex="-1">
+          <i class="fa-regular fa-eye" id="gate-pw-eye"></i>
+        </button>
+      </div>
+      <div class="pw-error" id="gate-pw-error">Incorrect password. Try again.</div>
+      <button class="pw-submit" onclick="submitGatePw()">Unlock Room →</button>
+    </div>
+  </div>
+
+  <!-- ══ ERROR VIEW ══ -->
+  <div id="error-view">
+    <div class="error-card">
+      <div class="error-icon" id="error-icon">⏰</div>
+      <h2 id="error-title">Room Not Found</h2>
+      <p id="error-msg">This room doesn't exist or the link is invalid.</p>
+      <a href="codeshare.html" class="error-btn">
+        <i class="fa-solid fa-plus"></i> Create New Room
+      </a>
+    </div>
+  </div>
+
+</div><!-- .page -->
+
+<!-- QR Modal -->
+<div id="qr-modal">
+  <div class="qr-modal-card">
+    <h3>Scan to open on another device</h3>
+    <p id="qr-modal-url" style="font-family:var(--mono);font-size:0.75rem;color:var(--muted)">—</p>
+    <div class="qr-wrap" id="qr-modal-box"></div><br/>
+    <button class="qr-close" onclick="closeQR()">Close</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ─── Utilities ─────────────────────────────── */
+function showToast(msg, dur = 3000) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), dur);
+}
+
+function showView(id) {
+  ['landing','editor-view','viewer-view','pw-gate','error-view'].forEach(v => {
+    const el = document.getElementById(v);
+    el.style.display = 'none';
+  });
+  const target = document.getElementById(id);
+  target.style.display = 'flex';
+  target.style.flexDirection = 'column';
+}
+
+function showError(icon, title, msg) {
+  document.getElementById('error-icon').textContent = icon;
+  document.getElementById('error-title').textContent = title;
+  document.getElementById('error-msg').textContent   = msg;
+  showView('error-view');
+}
+
+function fmtExpiry(iso) {
+  if (!iso) return 'Never';
+  const d = new Date(iso);
+  const now = new Date();
+  const diff = d - now;
+  if (diff < 0) return 'Expired';
+  const h = Math.floor(diff / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  if (h > 24) return `${Math.floor(h/24)}d ${h%24}h`;
+  if (h > 0) return `${h}h ${m}m`;
+  return `${m}m`;
+}
+
+/* ─── Landing form helpers ───────────────────── */
+document.getElementById('pw-toggle').addEventListener('change', function() {
+  document.getElementById('pw-field').style.display = this.checked ? 'block' : 'none';
+});
+
+document.querySelectorAll('.expiry-opt').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.expiry-opt').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+let pwVisible = false;
+function togglePwVis() {
+  pwVisible = !pwVisible;
+  const inp = document.getElementById('room-password');
+  const eye = document.getElementById('pw-eye');
+  inp.type = pwVisible ? 'text' : 'password';
+  eye.className = pwVisible ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
+}
+
+let gatePwVisible = false;
+function toggleGatePwVis() {
+  gatePwVisible = !gatePwVisible;
+  const inp = document.getElementById('gate-pw-input');
+  const eye = document.getElementById('gate-pw-eye');
+  inp.type = gatePwVisible ? 'text' : 'password';
+  eye.className = gatePwVisible ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
+}
+
+/* ─── Build viewer URL ───────────────────────── */
+// FIX: dynamically uses current host/path so it works in any environment
+function buildViewerURL(roomId) {
+  const base = window.location.href.split('?')[0]; // strip existing params
+  return `${base}?room=${roomId}`;
+}
+
+/* ─── Create room ────────────────────────────── */
+async function createRoom() {
+  const btn   = document.getElementById('create-btn');
+  const title = document.getElementById('room-title').value.trim() || 'Untitled';
+  const lang  = document.getElementById('room-lang').value;
+  const usePw = document.getElementById('pw-toggle').checked;
+  const pw    = usePw ? document.getElementById('room-password').value : null;
+  const expiryBtn = document.querySelector('.expiry-opt.active');
+  const expiryHours = expiryBtn?.dataset.hours ? parseInt(expiryBtn.dataset.hours) : null;
+
+  if (usePw && !pw) { showToast('⚠ Enter a password or disable the toggle'); return; }
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Creating…';
+
+  try {
+    const res = await fetch('/code/new', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, language: lang, password: pw || null, expiry_hours: expiryHours }),
+    });
+    if (!res.ok) throw new Error('Server error');
+    const data = await res.json();
+    launchEditor(data, pw);
+  } catch (e) {
+    showToast('⚠ Failed to create room. Is the server running?');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-circle-plus"></i> Create New Share';
+  }
+}
+
+/* ─── Join room ──────────────────────────────── */
+function joinRoom() {
+  let val = document.getElementById('join-room-id').value.trim();
+  if (!val) { showToast('⚠ Paste a room ID or link'); return; }
+  // Extract room ID from full URL if pasted
+  const match = val.match(/[?&]room=([^&]+)/);
+  const roomId = match ? decodeURIComponent(match[1]) : val.split('/').pop().split('?')[0];
+  const base = window.location.href.split('?')[0];
+  window.location.href = `${base}?room=${encodeURIComponent(roomId)}`;
+}
+
+/* ─── Editor ─────────────────────────────────── */
+let editorWS     = null;
+let editorRoomId = null;
+let editorPw     = null;
+let sendTimer    = null;
+
+function launchEditor(roomData, pw) {
+  editorRoomId = roomData.room_id;
+  editorPw     = pw || null;
+
+  // Update URL without reload
+  const url = new URL(window.location);
+  url.searchParams.set('room', roomData.room_id);
+  url.searchParams.set('edit', '1');
+  window.history.replaceState({}, '', url);
+
+  const shareURL = buildViewerURL(roomData.room_id);
+
+  document.getElementById('share-link-text').textContent     = shareURL;
+  document.getElementById('editor-title').value              = roomData.title || '';
+  document.getElementById('editor-lang').value               = roomData.language || 'plaintext';
+  document.getElementById('sp-room-id').textContent          = roomData.room_id;
+  document.getElementById('sp-lang').textContent             = roomData.language || 'plaintext';
+  document.getElementById('sb-lang-bar').textContent         = roomData.language || 'plaintext';
+  document.getElementById('sp-expires').textContent          = fmtExpiry(roomData.expires_at);
+
+  showView('editor-view');
+  connectEditorWS();
+  document.getElementById('code-editor-ta').focus();
+}
+
+function connectEditorWS() {
+  const proto = window.location.protocol === 'https:' ? 'wss' : 'ws';
+  const pwParam = editorPw ? `&password=${encodeURIComponent(editorPw)}` : '';
+  const wsURL = `${proto}://${window.location.host}/ws/code/${editorRoomId}?role=editor${pwParam}`;
+
+  editorWS = new WebSocket(wsURL);
+  setConnBadge('editor-conn-badge', 'connecting');
+  setConnStatus('sb-conn', 'connecting');
+
+  editorWS.onopen = () => {
+    setConnBadge('editor-conn-badge', 'connected');
+    setConnStatus('sb-conn', 'connected');
+  };
+
+  editorWS.onmessage = (e) => {
+    const msg = JSON.parse(e.data);
+    if (msg.type === 'snapshot' || msg.type === 'viewers') {
+      updateViewerCount(msg.viewers ?? msg.count ?? 0);
+    }
+  };
+
+  editorWS.onclose = () => {
+    setConnBadge('editor-conn-badge', 'disconnected');
+    setConnStatus('sb-conn', 'disconnected');
+    setTimeout(connectEditorWS, 2000);
+  };
+
+  editorWS.onerror = () => setConnBadge('editor-conn-badge', 'disconnected');
+}
+
+function setConnBadge(id, state) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.className = `conn-badge ${state}`;
+  const labels = { connected:'Connected', disconnected:'Disconnected', connecting:'Connecting…' };
+  el.innerHTML = `<span class="conn-dot"></span> ${labels[state]}`;
+}
+
+function setConnStatus(id, state) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const icons  = { connected:'#34d399', disconnected:'#f87171', connecting:'#fb923c' };
+  const labels = { connected:'Connected', disconnected:'Disconnected', connecting:'Connecting…' };
+  el.innerHTML = `<i class="fa-solid fa-circle" style="font-size:7px;color:${icons[state]}"></i> ${labels[state]}`;
+}
+
+function updateViewerCount(n) {
+  document.getElementById('viewer-count').textContent = n;
+  document.getElementById('sp-viewers').textContent   = n;
+}
+
+function onEditorInput() {
+  const ta      = document.getElementById('code-editor-ta');
+  const content = ta.value;
+  const chars   = content.length;
+  const lines   = content.split('\n').length;
+
+  document.getElementById('sp-chars').textContent = chars.toLocaleString();
+  document.getElementById('sp-lines').textContent = lines.toLocaleString();
+  document.getElementById('sb-chars').textContent = `${chars.toLocaleString()} chars`;
+  document.getElementById('sb-lines').textContent = `${lines.toLocaleString()} lines`;
+
+  clearTimeout(sendTimer);
+  sendTimer = setTimeout(() => {
+    if (editorWS && editorWS.readyState === WebSocket.OPEN) {
+      editorWS.send(JSON.stringify({ type: 'update', content }));
+      const now = new Date().toLocaleTimeString();
+      document.getElementById('sp-sync').textContent = now;
+      document.getElementById('sb-sync').textContent = `Synced ${now}`;
+    }
+  }, 300);
+}
+
+function onTitleChange() {
+  clearTimeout(window._metaTimer);
+  window._metaTimer = setTimeout(() => {
+    const title = document.getElementById('editor-title').value;
+    if (editorWS && editorWS.readyState === WebSocket.OPEN) {
+      editorWS.send(JSON.stringify({ type: 'meta', title }));
+    }
+  }, 500);
+}
+
+function onLangChange() {
+  const lang = document.getElementById('editor-lang').value;
+  document.getElementById('sp-lang').textContent     = lang;
+  document.getElementById('sb-lang-bar').textContent = lang;
+  if (editorWS && editorWS.readyState === WebSocket.OPEN) {
+    editorWS.send(JSON.stringify({ type: 'meta', language: lang }));
+  }
+}
+
+function handleTab(e) {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    const ta    = e.target;
+    const start = ta.selectionStart;
+    const end   = ta.selectionEnd;
+    ta.value = ta.value.slice(0, start) + '  ' + ta.value.slice(end);
+    ta.selectionStart = ta.selectionEnd = start + 2;
+    onEditorInput();
+  }
+}
+
+function clearEditor() {
+  if (!confirm('Clear all content? This will immediately update for viewers.')) return;
+  document.getElementById('code-editor-ta').value = '';
+  onEditorInput();
+  if (editorWS && editorWS.readyState === WebSocket.OPEN) {
+    editorWS.send(JSON.stringify({ type: 'update', content: '' }));
+  }
+}
+
+function copyEditorContent() {
+  const content = document.getElementById('code-editor-ta').value;
+  if (!content) { showToast('Nothing to copy yet'); return; }
+  navigator.clipboard.writeText(content).then(() => showToast('✓ Content copied'));
+}
+
+function copyShareLink() {
+  const link = document.getElementById('share-link-text').textContent;
+  navigator.clipboard.writeText(link).then(() => showToast('✓ Share link copied'));
+}
+
+/* ─── Viewer ─────────────────────────────────── */
+let viewerWS     = null;
+let viewerRoomId = null;
+let viewerPw     = null;
+let lastUpdated  = null;
+let updatedTimer = null;
+
+function launchViewer(roomId, pw) {
+  viewerRoomId = roomId;
+  viewerPw     = pw || null;
+  showView('viewer-view');
+  document.getElementById('vsb-room').textContent = `Room: ${roomId}`;
+  connectViewerWS();
+}
+
+function connectViewerWS() {
+  const proto = window.location.protocol === 'https:' ? 'wss' : 'ws';
+  const pwParam = viewerPw ? `&password=${encodeURIComponent(viewerPw)}` : '';
+  const wsURL = `${proto}://${window.location.host}/ws/code/${viewerRoomId}?role=viewer${pwParam}`;
+
+  viewerWS = new WebSocket(wsURL);
+  setConnBadge('viewer-conn-badge', 'connecting');
+  document.getElementById('vsb-conn').textContent = 'Connecting…';
+
+  viewerWS.onopen = () => {
+    setConnBadge('viewer-conn-badge', 'connected');
+    document.getElementById('vsb-conn').textContent = 'Connected';
+  };
+
+  viewerWS.onmessage = (e) => {
+    const msg = JSON.parse(e.data);
+    if (msg.type === 'snapshot') {
+      document.getElementById('viewer-title').textContent      = msg.title || 'Untitled';
+      document.getElementById('viewer-lang-badge').textContent = msg.language || 'plaintext';
+      renderViewerContent(msg.content || '');
+    } else if (msg.type === 'update') {
+      renderViewerContent(msg.content || '');
+      lastUpdated = new Date();
+      startUpdatedTimer();
+    } else if (msg.type === 'meta') {
+      if (msg.title)    document.getElementById('viewer-title').textContent      = msg.title;
+      if (msg.language) document.getElementById('viewer-lang-badge').textContent = msg.language;
+    }
+  };
+
+  viewerWS.onclose = (e) => {
+    setConnBadge('viewer-conn-badge', 'disconnected');
+    document.getElementById('vsb-conn').textContent = 'Disconnected — reconnecting…';
+    if (e.code === 4010) { showError('⏰','Room Expired','This share link has expired and is no longer available.'); return; }
+    if (e.code === 4003) { showError('🔒','Wrong Password','The password you entered is incorrect.'); return; }
+    if (e.code === 4004) { showError('🔍','Room Not Found','This room does not exist or has been deleted.'); return; }
+    setTimeout(connectViewerWS, 2000);
+  };
+
+  viewerWS.onerror = () => setConnBadge('viewer-conn-badge', 'disconnected');
+}
+
+function renderViewerContent(content) {
+  const el = document.getElementById('viewer-code');
+  if (!content) {
+    el.textContent = 'Waiting for content from the editor…';
+    el.className   = 'empty';
+    document.getElementById('vsb-chars').textContent = '0 chars';
+  } else {
+    el.textContent = content;
+    el.className   = '';
+    document.getElementById('vsb-chars').textContent = `${content.length.toLocaleString()} chars`;
+  }
+}
+
+function startUpdatedTimer() {
+  clearInterval(updatedTimer);
+  updatedTimer = setInterval(() => {
+    if (!lastUpdated) return;
+    const sec = Math.round((Date.now() - lastUpdated) / 1000);
+    const label = sec < 5 ? 'Just now' : sec < 60 ? `${sec}s ago` : `${Math.floor(sec/60)}m ago`;
+    document.getElementById('vsb-updated').textContent = `Updated ${label}`;
+  }, 1000);
+}
+
+function copyViewerContent() {
+  const el = document.getElementById('viewer-code');
+  if (el.classList.contains('empty')) { showToast('Nothing to copy yet'); return; }
+  navigator.clipboard.writeText(el.textContent).then(() => showToast('✓ Content copied to clipboard'));
+}
+
+function reportShare() {
+  showToast('Thank you — report received.');
+}
+
+/* ─── QR Modal ───────────────────────────────── */
+let qrGenerated = false;
+function openQR() {
+  const link  = document.getElementById('share-link-text').textContent;
+  const modal = document.getElementById('qr-modal');
+  document.getElementById('qr-modal-url').textContent = link;
+  if (!qrGenerated) {
+    new QRCode(document.getElementById('qr-modal-box'), {
+      text: link, width: 180, height: 180,
+      colorDark: '#000', colorLight: '#fff',
+    });
+    qrGenerated = true;
+  }
+  modal.classList.add('open');
+}
+
+function closeQR() {
+  document.getElementById('qr-modal').classList.remove('open');
+}
+
+document.getElementById('qr-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeQR();
+});
+
+/* ─── Password gate ──────────────────────────── */
+// FIX: removed stray 3rd parameter from all call sites
+let _gateRoomId   = null;
+let _gateIsEditor = false;
+
+function showPwGate(roomId, isEditor) {
+  _gateRoomId   = roomId;
+  _gateIsEditor = isEditor;
+  document.getElementById('gate-pw-error').style.display = 'none';
+  document.getElementById('gate-pw-input').value = '';
+  showView('pw-gate');
+  setTimeout(() => document.getElementById('gate-pw-input').focus(), 50);
+}
+
+async function submitGatePw() {
+  const pw  = document.getElementById('gate-pw-input').value;
+  const err = document.getElementById('gate-pw-error');
+  err.style.display = 'none';
+
+  if (!pw) { err.textContent = 'Please enter a password.'; err.style.display = 'block'; return; }
+
+  try {
+    const res = await fetch(`/code/${_gateRoomId}?password=${encodeURIComponent(pw)}`);
+    if (res.status === 403) {
+      err.textContent = 'Incorrect password. Try again.';
+      err.style.display = 'block';
+      return;
+    }
+    if (res.status === 410) { showError('⏰', 'Room Expired', 'This share link has expired.'); return; }
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    if (_gateIsEditor) {
+      launchEditor(data, pw);
+    } else {
+      launchViewer(_gateRoomId, pw);
+    }
+  } catch {
+    err.textContent = 'Server error. Please try again.';
+    err.style.display = 'block';
+  }
+}
+
+/* ─── Router ─────────────────────────────────── */
+async function init() {
+  const params = new URLSearchParams(window.location.search);
+  const roomId = params.get('room');
+  const isEdit = params.get('edit') === '1';
+
+  if (!roomId) {
+    showView('landing');
+    return;
+  }
+
+  if (isEdit) {
+    try {
+      const res = await fetch(`/code/${roomId}`);
+      if (res.status === 404) { showError('🔍', 'Room Not Found', "This room doesn't exist."); return; }
+      if (res.status === 410) { showError('⏰', 'Room Expired', 'This share link has expired.'); return; }
+      const data = await res.json();
+      if (data.has_password) {
+        showPwGate(roomId, true);  // FIX: only 2 args
+      } else {
+        launchEditor(data, null);
+      }
+    } catch {
+      showError('⚠️', 'Error', 'Could not connect to the server.');
+    }
+    return;
+  }
+
+  // Viewer flow
+  try {
+    const res = await fetch(`/code/${roomId}`);
+    if (res.status === 404) { showError('🔍', 'Room Not Found', "This room doesn't exist."); return; }
+    if (res.status === 410) { showError('⏰', 'Room Expired', 'This share link has expired.'); return; }
+    if (res.status === 403) { showPwGate(roomId, false); return; }  // FIX: only 2 args
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    if (data.has_password) {
+      showPwGate(roomId, false);  // FIX: only 2 args
+    } else {
+      launchViewer(roomId, null);
+    }
+  } catch {
+    showError('⚠️', 'Error', 'Could not connect to the server.');
+  }
+}
+
+/* ─── Boot ───────────────────────────────────── */
+document.getElementById('landing').style.display = 'flex';
+['editor-view','viewer-view','pw-gate','error-view'].forEach(id => {
+  document.getElementById(id).style.display = 'none';
+});
+
+init();
+</script>
+</body>
+</html>
