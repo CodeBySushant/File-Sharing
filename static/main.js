@@ -180,7 +180,8 @@ async function loadRecentFiles() {
       return;
     }
 
-    files.forEach(file => {
+    // Limit to 3 most recent files only
+    files.slice(0, 3).forEach(file => {
       const sizeMB = (file.file_size / (1024 * 1024)).toFixed(2);
       const ext    = file.file_name.split('.').pop().toLowerCase();
 
@@ -191,7 +192,8 @@ async function loadRecentFiles() {
       else if (['mp4','mov','avi','mkv'].includes(ext))               { iconClass = 'file-code'; iconTag = 'fa-file-video'; }
       else if (['zip','tar','gz','rar'].includes(ext))                { iconClass = 'file-code'; iconTag = 'fa-file-zipper'; }
 
-      const uploaded = new Date(file.uploaded_at);
+      const rawTs  = file.uploaded_at.endsWith('Z') ? file.uploaded_at : file.uploaded_at + 'Z';
+      const uploaded = new Date(rawTs);
       const diffMin  = Math.round((Date.now() - uploaded) / 60000);
       let timeAgo    = diffMin < 1 ? 'Just now' : diffMin < 60 ? `${diffMin}m ago` : diffMin < 1440 ? `${Math.floor(diffMin/60)}h ago` : `${Math.floor(diffMin/1440)}d ago`;
 
@@ -267,7 +269,8 @@ function langIcon(lang) {
 }
 
 function timeAgo(isoStr) {
-  const diff = Math.round((Date.now() - new Date(isoStr)) / 60000);
+  const raw  = isoStr.endsWith('Z') ? isoStr : isoStr + 'Z';
+  const diff = Math.round((Date.now() - new Date(raw)) / 60000);
   if (diff < 1) return 'Just now';
   if (diff < 60) return `${diff}m ago`;
   if (diff < 1440) return `${Math.floor(diff / 60)}h ago`;

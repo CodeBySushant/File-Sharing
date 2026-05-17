@@ -11,7 +11,14 @@ import os
 import hashlib
 import json
 import asyncio
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
+
+def utcnow():
+    """Naive UTC datetime — compatible with existing SQLite rows.
+    Uses datetime.now(UTC).replace(tzinfo=None) to avoid the deprecation
+    warning while staying compatible with naive datetimes already in the DB.
+    """
+    return datetime.now(timezone.utc).replace(tzinfo=None)
 from typing import Optional, Dict, List
 from collections import defaultdict
 
@@ -82,7 +89,7 @@ async def cleanup_loop():
         await asyncio.sleep(3600)
         try:
             db = SessionLocal()
-            now = datetime.utcnow()
+            now = utcnow()
 
             expired_rooms = (
                 db.query(CodeRoom)
@@ -189,7 +196,7 @@ async def get_file(file_id: str, db: Session = Depends(get_db)):
 
 @app.get("/recent-files")
 async def get_recent_files(db: Session = Depends(get_db)):
-    files = db.query(FileModel).order_by(FileModel.uploaded_at.desc()).limit(10).all()
+    files = db.query(FileModel).order_by(FileModel.uploaded_at.desc()).limit(3).all()
     return [
         {
             "file_id":     f.file_id,
@@ -208,7 +215,7 @@ async def get_stats(db: Session = Depends(get_db)):
     total_files = db.query(func.count(FileModel.id)).scalar() or 0
     total_size  = db.query(func.sum(FileModel.file_size)).scalar() or 0
 
-    cutoff    = datetime.utcnow() - timedelta(hours=24)
+    cutoff    = utcnow() - timedelta(hours=24)
     rooms_24h = (
         db.query(func.count(CodeRoom.id))
         .filter(CodeRoom.created_at >= cutoff)
@@ -221,7 +228,7 @@ async def get_stats(db: Session = Depends(get_db)):
     earliest = db.query(func.min(FileModel.uploaded_at)).scalar()
     uptime_days = None
     if earliest:
-        uptime_days = (datetime.utcnow() - earliest).days
+        uptime_days = (utcnow() - earliest).days
 
     return {
         "total_files":      total_files,
@@ -249,7 +256,7 @@ async def get_active_rooms(db: Session = Depends(get_db)):
     result = []
     for room in rooms:
         # Skip expired rooms
-        if room.expires_at and datetime.utcnow() > room.expires_at:
+        if room.expires_at and utcnow() > room.expires_at:
             continue
         viewers = manager.viewer_count(room.room_id)
         editors = manager.editor_count(room.room_id)
@@ -280,7 +287,7 @@ async def create_code_room(body: CodeRoomCreate, db: Session = Depends(get_db)):
 
     expires_at = None
     if body.expiry_hours:
-        expires_at = datetime.utcnow() + timedelta(hours=body.expiry_hours)
+        expires_at = utcnow() + timedelta(hours=body.expiry_hours)
 
     room = CodeRoom(
         room_id=room_id,
@@ -314,7 +321,7 @@ async def get_code_room(
     if not room:
         raise HTTPException(status_code=404, detail="Room not found")
 
-    if room.expires_at and datetime.utcnow() > room.expires_at:
+    if room.expires_at and utcnow() > room.expires_at:
         raise HTTPException(status_code=410, detail="Room has expired")
 
     if room.password_hash:
@@ -346,7 +353,7 @@ async def code_ws(
             await websocket.close(code=4004)
             return
 
-        if room.expires_at and datetime.utcnow() > room.expires_at:
+        if room.expires_at and utcnow() > room.expires_at:
             await websocket.close(code=4010)
             return
 
@@ -379,13 +386,13 @@ async def code_ws(
                     if msg.get("type") == "update":
                         new_content = msg.get("content", "")
                         room.content = new_content
-                        room.updated_at = datetime.utcnow()
+                        room.updated_at = utcnow()
                         db.commit()
 
                         await manager.broadcast(room_id, {
                             "type":       "update",
                             "content":    new_content,
-                            "updated_at": datetime.utcnow().isoformat(),
+                            "updated_at": utcnow().isoformat(),
                         }, exclude=websocket)
 
                     elif msg.get("type") == "meta":
@@ -393,7 +400,7 @@ async def code_ws(
                             room.language = msg["language"]
                         if "title" in msg:
                             room.title = msg["title"]
-                        room.updated_at = datetime.utcnow()
+                        room.updated_at = utcnow()
                         db.commit()
 
                         await manager.broadcast(room_id, {
